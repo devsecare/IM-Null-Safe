@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "234440002879",
+    "project_id": "im-app-android",
+    "storage_bucket": "im-app-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234440002879:android:f713f1de37d252052c578a",
+        "android_client_info": {
+          "package_name": "com.incredibleman.incredibleman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234440002879-59ndq7fn1r5r701mngpe2m3dgtdo3mbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4ULqKbIKfxdSGW_K4qwbZ7-NyDYtManc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234440002879-59ndq7fn1r5r701mngpe2m3dgtdo3mbq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
