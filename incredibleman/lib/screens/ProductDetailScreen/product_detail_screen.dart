@@ -127,7 +127,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     await Hive.box(Cart_Items)
                         .put(widget.data.id, widget.data.id);
 
-                    Get.to(() => const LoginScreen(), fullscreenDialog: true);
+                    Get.to(() => const LoginScreen());
                   } else {
                     userin && widget.user!.billing!.address1 == ""
                         ? Get.to(() => FirstTimeAddress(

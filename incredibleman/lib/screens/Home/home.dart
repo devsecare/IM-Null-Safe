@@ -65,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     cro.cartitme1();
     super.initState();
     FirebaseMessaging.instance.getInitialMessage().then((message) {
+      print("notify");
       if (message != null) {
         Get.to(() => NotificationTapScreen(data: message.data['test']));
       }
@@ -286,13 +287,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                         GestureDetector(
                           onTap: () async {
-                            // LocalNotificationService.display(
-                            //     const RemoteMessage(
-                            //   notification: RemoteNotification(
-                            //     title: "test for ios",
-                            //     body: "hello ios ! how Are You?",
-                            //   ),
-                            // ));
+                            LocalNotificationService.display(
+                              const RemoteMessage(
+                                notification: RemoteNotification(
+                                  title: "70% OFF on Hair And Face Combo",
+                                  body:
+                                      "70% OFF on Hair And Face Combo, \nGrab This Sale and use INCREDIBLEMAN50 coupen code \nto get 50% addational Discount on Every Products",
+                                ),
+                              ),
+                            );
 
                             // Get.to(()=> ThankYouScreen());
                           },
@@ -868,6 +871,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Image.network(
                                         banner.post1!.banner!,
                                         fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return Image.asset(
+                                            logoloader,
+                                            width: width / 2,
+                                            height: height / 3.5,
+                                          );
+                                        },
                                       ),
                                     ),
                                   );
@@ -1044,6 +1058,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Image.network(
                                         banner.post2!.banner!,
                                         fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return Image.asset(
+                                            logoloader,
+                                            width: width / 2,
+                                            height: height / 3.5,
+                                          );
+                                        },
                                       ),
                                     ),
                                   );

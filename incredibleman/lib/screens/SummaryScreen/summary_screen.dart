@@ -147,34 +147,37 @@ class _SummaryScreenState extends State<SummaryScreen> {
     }
   }
 
-  // couponcheck({String code}) async {
-  //   setState(() {
-  //     _loading = true;
-  //   });
-  //   try {
-  //     var cop = await CartData.couponCheck(code: code);
-  //     if (cop.length == 0) {
-  //       print("naaa paade che coupon");
-  //       setState(() {
-  //         _loading = false;
-  //       });
-  //       Get.snackbar(
-  //         "Invalid Coupon",
-  //         "This Coupon is Invalid ",
-  //         backgroundColor: Colors.white,
-  //       );
-  //     } else {
-  //       setState(() {
-  //         couponvalue = double.parse(cop[0].amount);
-  //         finalprice = finalprice - couponvalue;
-  //         _loading = false;
-  //         print(finalprice);
-  //       });
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  couponcheck({required String code}) async {
+    setState(() {
+      _loading = true;
+    });
+    try {
+      var cop = await CartData.couponCheck(code: code);
+      if (cop.isEmpty) {
+        print("naaa paade che coupon");
+        setState(() {
+          _loading = false;
+        });
+        Get.snackbar(
+          "Invalid Coupon",
+          "This Coupon is Invalid ",
+          backgroundColor: Colors.white,
+        );
+      } else {
+        setState(() {
+          couponvalue = double.parse(cop[0].amount!);
+          finalprice = finalprice - couponvalue;
+          var dd = finalprice % couponvalue;
+          print("aaa che person vado price $dd");
+          _loading = false;
+          print(finalprice);
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void openCheckOut() async {
     var price = double.parse(finalprice.toString());
 
@@ -512,7 +515,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             suffixIcon: TextButton(
                               onPressed: () {
                                 if (_formkey.currentState!.validate()) {
-                                  // couponcheck(code: _coupon.text);
+                                  couponcheck(code: _coupon.text);
                                 }
                               },
                               child: Text("Check",

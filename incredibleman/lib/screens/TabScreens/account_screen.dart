@@ -4,8 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:incredibleman/constants/constants.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_customer.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_products.dart';
+import 'package:incredibleman/screens/EditAddressScreen/edit_address_screen.dart';
 import 'package:incredibleman/screens/Home/home.dart';
 import 'package:incredibleman/screens/LoginScreen/login_screen.dart';
+import 'package:incredibleman/screens/WishListScreen/wish_list_screen.dart';
 
 class Account extends StatelessWidget {
   final List<WooProduct>? products;
@@ -132,14 +134,14 @@ class Account extends StatelessWidget {
             ListTile(
               onTap: () {
                 //newwwwww
-                // Get.to(
-                //   () => WishListScreen(
-                //     products: products,
-                //     login: login,
-                //     user: user,
-                //     nav: false,
-                //   ),
-                // );
+                Get.to(
+                  () => WishListScreen(
+                    products: products,
+                    login: login,
+                    user: user,
+                    nav: false,
+                  ),
+                );
               },
               title: Text(
                 "Wishlist",
@@ -162,9 +164,9 @@ class Account extends StatelessWidget {
                 ? ListTile(
                     onTap: () {
                       //newwww
-                      // Get.to(() => AddressList(
-                      //       user: user,
-                      //     ));
+                      Get.to(() => EditAddressScreen(
+                            user: user,
+                          ));
                     },
                     title: Text(
                       "Address",

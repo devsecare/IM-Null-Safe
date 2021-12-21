@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:incredibleman/providers/LocalNotificationService/local_notification_services.dart';
 import 'package:incredibleman/providers/carttestModel/cartbox.dart';
@@ -57,7 +56,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      title: 'Incradable man ',
+      title: 'Incredible man ',
       home: const SplashScreen(),
     );
   }

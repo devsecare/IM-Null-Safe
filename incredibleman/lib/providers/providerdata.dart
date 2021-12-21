@@ -95,6 +95,7 @@ class CartData extends GetxController {
       final coup = couponModelFromJson(response.body);
 
       return coup;
+      // ignore: unused_catch_clause
     } on Exception catch (e) {
       rethrow;
     }

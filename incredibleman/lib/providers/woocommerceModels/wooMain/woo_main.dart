@@ -4,7 +4,6 @@
 
 library woocommerce;
 
-import 'dart:async';
 import "dart:collection";
 import 'dart:convert';
 import 'dart:io';
@@ -202,6 +201,7 @@ class WooCommerce {
     final response = await post(queryUri.toString(), customer.toJson());
     _printToLog('created customer : ' + response.toString());
     final cus = WooCustomer.fromJson(response);
+    // ignore: unnecessary_type_check
     if (cus is WooCustomer) {
       return true;
     } else {
