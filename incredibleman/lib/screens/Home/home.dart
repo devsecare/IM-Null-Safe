@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:incredibleman/constants/constants.dart';
 import 'package:incredibleman/providers/BannerAdModel/banner_ad.dart';
 import 'package:incredibleman/providers/LocalNotificationService/local_notification_services.dart';
+import 'package:incredibleman/providers/orderModel/order_model.dart';
 import 'package:incredibleman/providers/providerdata.dart';
 import 'package:incredibleman/providers/reviews/reviews_model.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_create_order.dart';
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late List<WooProductCategory> category = [];
   WooCustomer? user;
-  late List<WooOrder> orders = [];
+  late List<dynamic> orders = [];
   late List<Reviews> productReviews = [];
 
   void hmmm() {
@@ -65,19 +66,30 @@ class _HomeScreenState extends State<HomeScreen> {
     cro.cartitme1();
     super.initState();
     FirebaseMessaging.instance.getInitialMessage().then((message) {
-      print("notify");
       if (message != null) {
-        Get.to(() => NotificationTapScreen(data: message.data['test']));
+        print("notify");
+        final data = message.data['id'];
+        final name = message.data['name'];
+        Get.to(() => CategoryScreen(
+              id: data.toString(),
+              name: name.toString(),
+            ));
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      final data = event.data['test'];
-      print("ontap pr che aaa ");
+      final data = event.data['id'];
+      final name = event.data['name'];
+      // print("ontap pr che aaa ");
 
-      Get.to(() => NotificationTapScreen(
-            data: data.toString(),
+      Get.to(() => CategoryScreen(
+            id: data.toString(),
+            name: name.toString(),
+            // login: login,
           ));
-      print(data);
+      // Get.to(() => NotificationTapScreen(
+      //       data: data.toString(),
+      //     ));
+      // print(data);
     });
   }
 
@@ -103,17 +115,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
           user = await CartData.wooCommerce.getCustomerById(id: userid);
           print(user!.firstName);
+          print(userid);
 
           login = true;
 
-          // orders = await CartData.wooCommerce.getOrders(customer: userid);
+          orders = await CartData.getAllOrder(userid: userid);
+
           // ignore: empty_catches, unused_catch_clause
-        } on WooCommerceError catch (e) {}
+        } on WooCommerceError catch (e) {
+          print(e);
+        }
       }
       setState(() {
         _loading = false;
       });
     } catch (e) {
+      print(e);
       Get.defaultDialog(
           title: "Opps... ",
           content: const Text("something Went Wrong Please Try Again"));
@@ -285,59 +302,59 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 accountEmail: Text(""),
                               ),
-                        GestureDetector(
-                          onTap: () async {
-                            LocalNotificationService.display(
-                              const RemoteMessage(
-                                notification: RemoteNotification(
-                                  title: "70% OFF on Hair And Face Combo",
-                                  body:
-                                      "70% OFF on Hair And Face Combo, \nGrab This Sale and use INCREDIBLEMAN50 coupen code \nto get 50% addational Discount on Every Products",
-                                ),
-                              ),
-                            );
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //     // LocalNotificationService.display(
+                        //     //   const RemoteMessage(
+                        //     //     notification: RemoteNotification(
+                        //     //       title: "70% OFF on Hair And Face Combo",
+                        //     //       body:
+                        //     //           "70% OFF on Hair And Face Combo, \nGrab This Sale and use INCREDIBLEMAN50 coupen code \nto get 50% addational Discount on Every Products",
+                        //     //     ),
+                        //     //   ),
+                        //     // );
 
-                            // Get.to(()=> ThankYouScreen());
-                          },
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: 60,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                right: 30.0,
-                                left: 20.0,
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.notifications,
-                                    color: Colors.black54,
-                                  ),
-                                  const SizedBox(
-                                    width: 20.0,
-                                  ),
-                                  Text(
-                                    "My Notification",
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                            top: 0.0,
-                            left: 20.0,
-                            right: 20.0,
-                          ),
-                          child: Divider(
-                            thickness: 1.8,
-                          ),
-                        ),
+                        //     // Get.to(()=> ThankYouScreen());
+                        //   },
+                        //   child: SizedBox(
+                        //     width: double.infinity,
+                        //     height: 60,
+                        //     child: Padding(
+                        //       padding: const EdgeInsets.only(
+                        //         right: 30.0,
+                        //         left: 20.0,
+                        //       ),
+                        //       child: Row(
+                        //         children: [
+                        //           const Icon(
+                        //             Icons.notifications,
+                        //             color: Colors.black54,
+                        //           ),
+                        //           const SizedBox(
+                        //             width: 20.0,
+                        //           ),
+                        //           Text(
+                        //             "My Notification",
+                        //             style: GoogleFonts.poppins(
+                        //               fontWeight: FontWeight.w600,
+                        //             ),
+                        //           ),
+                        //           const Spacer(),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // const Padding(
+                        //   padding: EdgeInsets.only(
+                        //     top: 0.0,
+                        //     left: 20.0,
+                        //     right: 20.0,
+                        //   ),
+                        //   child: Divider(
+                        //     thickness: 1.8,
+                        //   ),
+                        // ),
                         Obx(() => GestureDetector(
                               onTap: () {
                                 Navigator.of(context).pop();
@@ -775,7 +792,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       name: cat.name!,
                                                       product: cro.newProducts,
                                                       user: user,
-                                                      login: login,
+                                                      // login: login,
                                                     ),
                                                   ),
                                                 );
@@ -860,28 +877,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                             name: "offer",
                                             product: cro.newProducts,
                                             user: user,
-                                            login: login,
+                                            // login: login,
                                           ),
                                         ),
                                       );
                                     },
-                                    child: SizedBox(
-                                      height: height / 3.8,
-                                      width: width,
-                                      child: Image.network(
-                                        banner.post1!.banner!,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Image.asset(
-                                            logoloader,
-                                            width: width / 2,
-                                            height: height / 3.5,
-                                          );
-                                        },
+                                    child: FittedBox(
+                                      child: SizedBox(
+                                        height: height / 3.8,
+                                        width: width,
+                                        child: Image.network(
+                                          banner.post1!.banner!,
+                                          fit: BoxFit.cover,
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Image.asset(
+                                              logoloader,
+                                              width: width / 2,
+                                              height: height / 3.5,
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ),
                                   );
@@ -1047,28 +1066,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                             name: "offer",
                                             product: cro.newProducts,
                                             user: user,
-                                            login: login,
+                                            // login: login,
                                           ),
                                         ),
                                       );
                                     },
-                                    child: SizedBox(
-                                      height: height / 3.8,
-                                      width: width,
-                                      child: Image.network(
-                                        banner.post2!.banner!,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Image.asset(
-                                            logoloader,
-                                            width: width / 2,
-                                            height: height / 3.5,
-                                          );
-                                        },
+                                    child: FittedBox(
+                                      child: SizedBox(
+                                        height: height / 3.8,
+                                        width: width,
+                                        child: Image.network(
+                                          banner.post2!.banner!,
+                                          fit: BoxFit.cover,
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Image.asset(
+                                              logoloader,
+                                              width: width / 2,
+                                              height: height / 3.5,
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ),
                                   );

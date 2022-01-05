@@ -19,16 +19,15 @@ class CategoryScreen extends StatefulWidget {
   final String id, name;
   final List<WooProduct>? product;
   final WooCustomer? user;
-  final bool login;
+  // final bool login;
 
-  const CategoryScreen(
-      {Key? key,
-      required this.id,
-      required this.name,
-      this.product,
-      this.user,
-      required this.login})
-      : super(key: key);
+  const CategoryScreen({
+    Key? key,
+    required this.id,
+    required this.name,
+    this.product,
+    this.user,
+  }) : super(key: key);
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
@@ -97,49 +96,53 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       delegate: ItemSearch(
                         widget.product,
                         widget.user,
-                        widget.login,
+                        cro.loginornot.value,
                       ));
                   // Navigator.push(context,
                   //     CupertinoPageRoute(builder: (context) => CartScreen()));
                 },
               ),
             ),
-            Obx(() => Padding(
-                  padding: const EdgeInsets.all(7.0),
-                  child: Badge(
-                    badgeColor: tabColor,
-                    padding: const EdgeInsets.all(5.0),
-                    position: const BadgePosition(
-                      bottom: 30.0,
-                      start: 25.0,
-                    ),
-                    badgeContent: Center(
-                      child: Text(
-                        cro.cartitem.toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                        ),
+            Obx(
+              () => Padding(
+                padding: const EdgeInsets.all(7.0),
+                child: Badge(
+                  badgeColor: tabColor,
+                  padding: const EdgeInsets.all(5.0),
+                  position: const BadgePosition(
+                    bottom: 30.0,
+                    start: 25.0,
+                  ),
+                  badgeContent: Center(
+                    child: Text(
+                      cro.cartitem.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.0,
                       ),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.shopping_cart,
-                        size: 30.0,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => CartScreen(
-                                      products: widget.product,
-                                      login: widget.login,
-                                      user: widget.user,
-                                    )));
-                      },
                     ),
                   ),
-                )),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.shopping_cart,
+                      size: 30.0,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => CartScreen(
+                            products: widget.product,
+                            login: cro.loginornot.value,
+                            user: widget.user,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
             PopupMenuButton(
               onSelected: (value) {
                 switch (value) {
@@ -256,8 +259,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                                     ProductDetailScreen(
                                                   data: products,
                                                   user: widget.user,
-                                                  products: widget.product!,
-                                                  login: widget.login,
+                                                  products: widget.product,
+                                                  login: cro.loginornot.value,
                                                 ),
                                               ),
                                             );

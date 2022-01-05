@@ -1,13 +1,17 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:incredibleman/constants/constants.dart';
 import 'package:incredibleman/main.dart';
+import 'package:incredibleman/providers/orderModel/order_model.dart';
 import 'package:incredibleman/providers/reviews/reviews_model.dart';
 import 'package:incredibleman/providers/woocommerceModels/wooMain/woo_main.dart';
+import 'package:incredibleman/providers/woocommerceModels/woo_create_order.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_products.dart';
 
 import 'BannerAdModel/banner_ad.dart';
@@ -21,7 +25,11 @@ class CartData extends GetxController {
   var mainloding = true.obs;
   var cr = true.obs;
   static late WooCommerce wooCommerce = WooCommerce(
-      baseUrl: baseUrl, consumerKey: ck, consumerSecret: cs, isDebug: false);
+    baseUrl: baseUrl,
+    consumerKey: ck,
+    consumerSecret: cs,
+    isDebug: true,
+  );
   @override
   void onInit() {
     getxfetchData();
@@ -51,7 +59,7 @@ class CartData extends GetxController {
   List<WooProduct> favlist1 = List<WooProduct>.empty(growable: true).obs;
   List<WooProduct> cartdata2 = List<WooProduct>.empty(growable: true).obs;
 
-  static late bool loginornot;
+  var loginornot = false.obs;
 
   var favTotal = 0.obs;
   var cartitem = 0.obs;
@@ -127,6 +135,47 @@ class CartData extends GetxController {
     }
   }
 
+  static Future<List<dynamic>> getAllOrder({required int userid}) async {
+    late List<WooOrder> order = [];
+    late List<LineItems> items = [];
+    try {
+      var response = await http.get(Uri.parse(
+          'https://www.incredibleman.in/wp-json/wc/v3/orders?consumer_key=$ck&consumer_secret=$cs&customer=$userid'));
+
+      List<dynamic> data = json.decode(response.body);
+      // var oooo =  data.map((element) {
+      //     print("aaa id batave che ${element['line_items'].runtimeType}");
+
+      //     element['line_items'].forEach((v) {
+      //       items.add(LineItems.fromJson(v));
+      //     });
+
+      //   }).toList();
+      //   print("aa total che ${items.length}");
+
+      // print("aaa type che ${data.runtimeType}");
+      // List<WooOrder> newData = data.cast<WooOrder>().toList();
+      // print("aaaa che new data ${newData.length}");
+
+      for (var o in data) {
+        order.add(
+          WooOrder(
+            id: o['id'],
+            status: o['status'],
+            parentId: o['parentId'],
+            number: o['number'],
+            lineItems: List<LineItems>.from(
+                o["line_items"].map((x) => LineItems.fromJson(x))).toList(),
+          ),
+        );
+      }
+
+      return data;
+    } on Exception {
+      rethrow;
+    }
+  }
+
   favList(List<WooProduct> dd) {
     lodgin(true);
     mainloding(true);
@@ -168,10 +217,10 @@ class CartData extends GetxController {
     cartitme1();
   }
 
-  static Future<bool> userlogin() async {
-    loginornot = await wooCommerce.isCustomerLoggedIn();
-
-    return loginornot;
+  Future<bool> userlogin() async {
+    var loginornot1 = await wooCommerce.isCustomerLoggedIn();
+    loginornot(loginornot1);
+    return loginornot1;
   }
 
 // /////////////////////////////////////////////////////////////////

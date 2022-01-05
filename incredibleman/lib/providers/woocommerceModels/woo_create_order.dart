@@ -1,5 +1,5 @@
 class WooOrder {
-  late int id;
+  int? id;
   int? parentId;
   String? number;
   String? orderKey;
@@ -43,7 +43,7 @@ class WooOrder {
   Links? links;
 
   WooOrder(
-      {required this.id,
+      {this.id,
       this.parentId,
       this.number,
       this.orderKey,
@@ -85,7 +85,6 @@ class WooOrder {
       this.couponLines,
       this.refunds,
       this.links})
-      // ignore: unnecessary_null_comparison
       : assert(id != null);
 
   WooOrder.fromJson(Map<String, dynamic> json) {
@@ -240,11 +239,11 @@ class WooOrder {
 }
 
 class WooOrderCouponLine {
-  int id;
-  String code;
-  String discount;
-  String discountTax;
-  List<MetaData> metaData;
+  int? id;
+  String? code;
+  String? discount;
+  String? discountTax;
+  List<MetaData>? metaData;
 
   WooOrderCouponLine(
       this.id, this.code, this.discount, this.discountTax, this.metaData);
@@ -264,7 +263,7 @@ class WooOrderCouponLine {
     data['code'] = code;
     data['discount'] = discount;
     data['discount_tax'] = discountTax;
-    data['meta_data'] = metaData.map((v) => v.toJson()).toList();
+    data['meta_data'] = metaData!.map((v) => v.toJson()).toList();
     return data;
   }
 }

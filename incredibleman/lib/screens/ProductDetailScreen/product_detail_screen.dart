@@ -25,13 +25,13 @@ import '../../main.dart';
 class ProductDetailScreen extends StatefulWidget {
   final WooProduct data;
   final WooCustomer? user;
-  final List<WooProduct> products;
+  final List<WooProduct>? products;
   final bool login;
   const ProductDetailScreen(
       {Key? key,
       required this.data,
       this.user,
-      required this.products,
+      this.products,
       required this.login})
       : super(key: key);
 
@@ -56,6 +56,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       var tt = go * 100;
       off = 100 - tt.round();
     }
+    print(widget.data.id);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -121,7 +122,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   minimumSize: Size(width / 2.0, 50),
                 ),
                 onPressed: () async {
-                  userin = await CartData.userlogin();
+                  userin = await controller.userlogin();
                   print(userin);
                   if (userin == false) {
                     await Hive.box(Cart_Items)
@@ -444,7 +445,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         data.addFav(
                                             widget.data.id, widget.data.id);
                                       }
-                                      data.favList(widget.products);
+                                      data.favList(widget.products!);
                                     },
                                     icon: Icon(
                                       Icons.favorite,

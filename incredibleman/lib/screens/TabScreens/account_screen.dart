@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incredibleman/constants/constants.dart';
+import 'package:incredibleman/providers/providerdata.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_customer.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_products.dart';
 import 'package:incredibleman/screens/EditAddressScreen/edit_address_screen.dart';
 import 'package:incredibleman/screens/Home/home.dart';
 import 'package:incredibleman/screens/LoginScreen/login_screen.dart';
 import 'package:incredibleman/screens/WishListScreen/wish_list_screen.dart';
+import 'package:incredibleman/screens/profileScreen/profile_screen.dart';
 
 class Account extends StatelessWidget {
   final List<WooProduct>? products;
@@ -100,37 +102,37 @@ class Account extends StatelessWidget {
             const SizedBox(
               height: 35.0,
             ),
-            ListTile(
-              onTap: () {
-                //newwww
-                // Get.to(() => CartScreen(
-                //       user: user,
-                //       products: products,
-                //       login: login,
-                //     ));
-              },
-              // tileColor: Colors.white,
-              title: Text(
-                "Notifications",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              leading: Image.asset(
-                notifi,
-                scale: 2,
-              ),
-              // leading: Icon(
-              //   Icons.notifications_none,
-              //   size: 35.0,
-              // ),
-              subtitle: const Text("Stay on top of all products updates"),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.black,
-              ),
-            ),
-            const Divider(),
+            // ListTile(
+            //   onTap: () {
+            //     //newwww
+            //     // Get.to(() => CartScreen(
+            //     //       user: user,
+            //     //       products: products,
+            //     //       login: login,
+            //     //     ));
+            //   },
+            //   // tileColor: Colors.white,
+            //   title: Text(
+            //     "Notifications",
+            //     style: GoogleFonts.poppins(
+            //       fontWeight: FontWeight.w600,
+            //     ),
+            //   ),
+            //   leading: Image.asset(
+            //     notifi,
+            //     scale: 2,
+            //   ),
+            //   // leading: Icon(
+            //   //   Icons.notifications_none,
+            //   //   size: 35.0,
+            //   // ),
+            //   subtitle: const Text("Stay on top of all products updates"),
+            //   trailing: const Icon(
+            //     Icons.arrow_forward_ios,
+            //     color: Colors.black,
+            //   ),
+            // ),
+            // const Divider(),
             ListTile(
               onTap: () {
                 //newwwwww
@@ -190,10 +192,10 @@ class Account extends StatelessWidget {
                 ? ListTile(
                     onTap: () {
                       //newssss
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (_) => ProfileScreen(
-                      //           user: user,
-                      //         )));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => ProfileScreen(
+                                user: user!,
+                              )));
                     },
                     title: Text(
                       "Profile Details",
@@ -232,7 +234,7 @@ class Account extends StatelessWidget {
                         ),
                         onPressed: () {
                           //newsss check this
-                          // CartData.wooCommerce.logUserOut();
+                          CartData.wooCommerce.logUserOut();
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                 builder: (context) => const HomeScreen(),

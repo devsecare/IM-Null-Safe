@@ -27,109 +27,111 @@ class ShopContainer extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6.0),
-            color: bgcontainer,
-          ),
-          child: Stack(
-            children: [
-              GestureDetector(
-                onTap: details,
-                child: Hero(
-                  tag: tag,
-                  child: Image.network(
-                    image,
-                    // fit: BoxFit.cover,
-                    width: width / 2,
-                    height: height / 3.5,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Image.asset(
-                        logoloader,
-                        width: width / 2,
-                        height: height / 3.5,
-                      );
-                    },
+        FittedBox(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6.0),
+              color: bgcontainer,
+            ),
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: details,
+                  child: Hero(
+                    tag: tag,
+                    child: Image.network(
+                      image,
+                      // fit: BoxFit.cover,
+                      width: width / 2,
+                      height: height / 3.5,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Image.asset(
+                          logoloader,
+                          width: width / 2,
+                          height: height / 3.5,
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: sale,
-                child: Positioned(
-                  left: width / 30,
-                  top: 8.0,
-                  child: Container(
-                    height: 35.0,
-                    width: 35.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      image: const DecorationImage(image: AssetImage(sales)),
-                      borderRadius: BorderRadius.circular(20.0),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          offset: Offset(
-                            5.0,
-                            5.0,
-                          ),
-                          blurRadius: 20.5,
-                          spreadRadius: 0.0,
-                        ), //BoxShadow
-                        BoxShadow(
+                Visibility(
+                  visible: sale,
+                  child: Positioned(
+                    left: width / 30,
+                    top: 8.0,
+                    child: Container(
+                      height: 35.0,
+                      width: 35.0,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(image: AssetImage(sales)),
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            offset: Offset(
+                              5.0,
+                              5.0,
+                            ),
+                            blurRadius: 20.5,
+                            spreadRadius: 0.0,
+                          ), //BoxShadow
+                          BoxShadow(
+                            color: Colors.white,
+                            offset: Offset(0.0, 0.0),
+                            blurRadius: 0.0,
+                            spreadRadius: 0.0,
+                          ), //BoxShadow
+                        ],
+                      ),
+                      child: const Text(
+                        "SALE",
+                        style: TextStyle(
                           color: Colors.white,
-                          offset: Offset(0.0, 0.0),
-                          blurRadius: 0.0,
-                          spreadRadius: 0.0,
-                        ), //BoxShadow
-                      ],
-                    ),
-                    child: const Text(
-                      "SALE",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 8.0,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 8.0,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                left: width / 3,
-                top: 8.0,
-                child: InkWell(
-                  onTap: like,
-                  child: Container(
-                    height: 30.0,
-                    width: 30.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.0),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          offset: Offset(
-                            5.0,
-                            5.0,
-                          ),
-                          blurRadius: 20.5,
-                          spreadRadius: 0.0,
-                        ), //BoxShadow
-                        BoxShadow(
-                          color: Colors.white,
-                          offset: Offset(0.0, 0.0),
-                          blurRadius: 0.0,
-                          spreadRadius: 0.0,
-                        ), //BoxShadow
-                      ],
+                Positioned(
+                  left: width * 0.38,
+                  top: 8.0,
+                  child: InkWell(
+                    onTap: like,
+                    child: Container(
+                      height: 30.0,
+                      width: 30.0,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            offset: Offset(
+                              5.0,
+                              5.0,
+                            ),
+                            blurRadius: 20.5,
+                            spreadRadius: 0.0,
+                          ), //BoxShadow
+                          BoxShadow(
+                            color: Colors.white,
+                            offset: Offset(0.0, 0.0),
+                            blurRadius: 0.0,
+                            spreadRadius: 0.0,
+                          ), //BoxShadow
+                        ],
+                      ),
+                      child: icon,
                     ),
-                    child: icon,
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         const SizedBox(
