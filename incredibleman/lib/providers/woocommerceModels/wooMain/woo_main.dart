@@ -11,7 +11,6 @@ import "dart:math";
 import "dart:core";
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:http/http.dart' as http;
-import 'package:incredibleman/providers/orderModel/order_model.dart';
 import 'package:incredibleman/providers/woocommerceModels/localstorage/local_db.dart';
 import '../jwt_response.dart';
 import '../woo_create_order.dart';

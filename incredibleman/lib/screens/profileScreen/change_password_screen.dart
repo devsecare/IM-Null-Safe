@@ -121,7 +121,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 fontWeight: FontWeight.w600,
               ),
               padding: const EdgeInsets.all(8.0),
-              minimumSize: Size(335, 50),
+              minimumSize: const Size(335, 50),
             ),
             onPressed: () async {
               if (_formkey.currentState!.validate()) {

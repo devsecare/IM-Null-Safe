@@ -56,7 +56,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       var tt = go * 100;
       off = 100 - tt.round();
     }
-    print(widget.data.id);
+    // print(widget.data.id);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -123,7 +123,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 onPressed: () async {
                   userin = await controller.userlogin();
-                  print(userin);
+                  // print(userin);
                   if (userin == false) {
                     await Hive.box(Cart_Items)
                         .put(widget.data.id, widget.data.id);

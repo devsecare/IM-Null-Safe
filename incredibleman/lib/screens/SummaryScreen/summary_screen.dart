@@ -43,6 +43,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
   var sgst;
   var igst = 18;
   bool guj = false;
+  var exitGST;
+  var coupencode;
+  var coupenid;
 
   late String shippingTitle;
   late String shippingid;
@@ -50,7 +53,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
   void initState() {
     _loading = true;
     super.initState();
-    print("aa id product in ${widget.products![0].id}");
+    // print("aa id product in ${widget.products![0].id}");
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
@@ -75,8 +78,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
   void _handlePaymentError(PaymentFailureResponse response) {
     Get.snackbar(
       "Payment",
-      "Payment Error: ${response.message}",
-      backgroundColor: Colors.red,
+      "Payment Faild: Please try agian",
+      backgroundColor: Colors.redAccent,
       colorText: Colors.white,
     );
   }
@@ -93,21 +96,32 @@ class _SummaryScreenState extends State<SummaryScreen> {
   ///
 
   getAddre() async {
-    print("aa first ${widget.price}");
+    var ty = igst / 100;
+    var hh = ty + 1;
+
+    exitGST = (double.parse(widget.price) / hh).roundToDouble();
+    // print("aa first ${widget.price}");
     if (widget.user!.billing!.state == "GUJARAT" ||
         widget.user!.billing!.state == "GUJRAT" ||
         widget.user!.billing!.state == "Gujarat" ||
         widget.user!.billing!.state == "gujarat" ||
         widget.user!.billing!.state == "GJ" ||
         widget.user!.billing!.state == "gj") {
-      cgst = (double.parse(widget.price) * 9) / 100;
-      sgst = (double.parse(widget.price) * 9) / 100;
+      // print('aaa value che gst vagr in $exitGST');
+      cgst = (exitGST * 9) / 100;
+      sgst = (exitGST * 9) / 100;
+      // print(cgst);
+      // print(sgst);
+      // var jj = cgst + sgst;
+      // print("aa to peli pde $jj");
+      // exitGST = double.parse(widget.price) - jj;
+      // print("aa to jovi pde $exitGST");
       guj = true;
-      print("AA Gujarat Vado Che");
+      // print("AA Gujarat Vado Che");
     }
-    gstadd = (double.parse(widget.price) * igst) / 100;
-    gstvalue = (double.parse(widget.price) + gstadd).roundToDouble();
-    print("aa gst value che $gstvalue");
+    gstadd = (exitGST * igst) / 100;
+    gstvalue = (exitGST + gstadd).roundToDouble();
+    // print("aa gst value che $gstadd");
 
     //  var addre = await CartData.woocommerce
     //         .getAllShippingZoneMethods(shippingZoneId: 1);
@@ -117,22 +131,24 @@ class _SummaryScreenState extends State<SummaryScreen> {
       var ch = await CartData.shippingDatat();
 
       var com = double.parse(ch[1].settings!.minAmount!.value!);
-      print("aa check thse $com");
+      // print("aa check thse $com");
       if (double.parse(widget.price) < com) {
-        print("aa biju ${widget.price}");
+        // print("aa biju ${widget.price}");
 
-        print(ch[0].settings!.cost!.value);
+        // print(ch[0].settings!.cost!.value);
         setState(() {
           shipvalue = int.parse(ch[0].settings!.cost!.value!);
           shippingid = ch[0].methodId!;
           shippingTitle = ch[0].methodTitle!;
 
           finalprice = gstvalue + shipvalue;
-          print("aa final value che $finalprice");
+          // print("aa final gstvalue che $gstvalue");
+          // print("aa final shipvalue che $shipvalue");
+          // print("aa final value che $finalprice");
           _loading = false;
         });
       } else {
-        print("aa triju ${widget.price}");
+        // print("aa triju ${widget.price}");
         setState(() {
           shippingid = ch[1].methodId!;
           shippingTitle = ch[1].methodTitle!;
@@ -153,8 +169,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
     });
     try {
       var cop = await CartData.couponCheck(code: code);
-      if (cop.isEmpty) {
-        print("naaa paade che coupon");
+      // print(cop[0].dateExpires);
+
+      var now = DateTime.now();
+      var check = now.isBefore(DateTime.parse(cop[0].dateExpires));
+      // print(check);
+      if (cop.isEmpty || !check) {
+        // print("naaa paade che coupon");
         setState(() {
           _loading = false;
         });
@@ -165,16 +186,37 @@ class _SummaryScreenState extends State<SummaryScreen> {
         );
       } else {
         setState(() {
-          couponvalue = double.parse(cop[0].amount!);
-          finalprice = finalprice - couponvalue;
-          var dd = finalprice % couponvalue;
-          print("aaa che person vado price $dd");
+          // print(finalprice);
+          var couponvalue1 = double.parse(cop[0].amount!);
+          var dd = couponvalue1 / 100;
+          // print("aa devider che $dd");
+          couponvalue = (finalprice * dd as double).roundToDouble();
+          // print("aaa che multi  vado price $couponvalue");
+          finalprice = (finalprice - couponvalue as double).roundToDouble();
+
+          coupencode = cop[0].code;
+          coupenid = cop[0].id;
+          // print("aaa che final  vado price $finalprice");
+
+          // finalprice = finalprice - couponvalue;
+          // var dd = finalprice % couponvalue;
+
           _loading = false;
-          print(finalprice);
+          // print(finalprice);
         });
       }
     } catch (e) {
-      print(e);
+      setState(() {
+        _loading = false;
+      });
+
+      // print("aa error che $e");
+      Get.snackbar(
+        "Invalid Coupon",
+        "This Coupon is Invalid ",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -182,7 +224,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     var price = double.parse(finalprice.toString());
 
     var options = {
-      'key': "rzp_test_teKzXCFq3aq5Ro",
+      'key': "rzp_live_gGSvf9bRFy4JYi",
       'amount': price * 100, //in the smallest currency sub-unit.
       'name': 'Incredible Man',
       // 'order_id': 'newtest', // Generate order_id using Orders API
@@ -199,7 +241,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     try {
       _razorpay.open(options);
     } catch (e) {
-      print("aa razor ni error che $e");
+      // print("aa razor ni error che $e");
     }
   }
 
@@ -241,6 +283,19 @@ class _SummaryScreenState extends State<SummaryScreen> {
         postcode: widget.user!.billing!.postcode,
         state: widget.user!.billing!.state,
       ),
+      couponLines: couponvalue == 0.0
+          ? []
+          : [
+              WooOrderPayloadCouponLines(
+                code: coupencode,
+              )
+            ],
+      // shippingLines: [
+      //   ShippingLines(
+      //     methodId: shippingid,
+      //     methodTitle: shippingTitle,
+      //   ),
+      // ],
     );
 
     await CartData.wooCommerce.createOrder(orderPayload);
@@ -307,6 +362,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     : ElevatedButton(
                         onPressed: () {
                           openCheckOut();
+                          // orderDone("hdshsdhcbsj");
                         },
                         child: Text(
                           "PAY NOW",
@@ -374,7 +430,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         _loading
                             ? const PriceLoading()
                             : Text(
-                                "$rupee ${widget.price}",
+                                "$rupee $exitGST",
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -543,6 +599,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             "- $rupee ${couponvalue.toString()}",
                             style: GoogleFonts.poppins(
                               color: Colors.green,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

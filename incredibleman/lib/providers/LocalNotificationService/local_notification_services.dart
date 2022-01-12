@@ -25,6 +25,7 @@ class LocalNotificationService {
           channelDescription: "This is Our channel",
           importance: Importance.max,
           priority: Priority.high,
+          fullScreenIntent: true,
           onlyAlertOnce: true,
         ),
         iOS: IOSNotificationDetails(),

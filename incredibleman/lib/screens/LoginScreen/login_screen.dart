@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incredibleman/constants/constants.dart';
 import 'package:incredibleman/providers/providerdata.dart';
+import 'package:incredibleman/providers/woocommerceModels/woo_error.dart';
 import 'package:incredibleman/screens/Home/home.dart';
 import 'package:incredibleman/screens/SignUpScreen/signup_screen.dart';
 import 'package:incredibleman/screens/widgetHelper/loading_screen.dart';
@@ -195,7 +196,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     username: _username.text,
                     password: _password.text,
                   );
-                  if (user.runtimeType == String) {
+                  print("aaa user che $user");
+                  if (user.runtimeType == String || user == null) {
                     setState(() {
                       _loading = false;
                     });
@@ -211,22 +213,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   } else {
                     setState(() {
                       _loading = false;
-                      Get.offAll(() => const HomeScreen());
-                      // Navigator.of(context).pushAndRemoveUntil(
-                      //     new MaterialPageRoute(builder: (context) => Home()),
-                      //     (route) => false);
                     });
+                    Get.offAll(() => const HomeScreen());
                   }
-
-                  // return err;
-
-                  // var err = await CartData.woocommerce.loginCustomer(
-                  //   username: _username.text,
-                  //   password: _password.text,
-                  // );
-
-                  // user = await CartData.woocommerce.loginCustomer(username: username, password: password)
-
                 }
               },
               icon: const Icon(Icons.arrow_back),

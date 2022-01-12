@@ -7,8 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:incredibleman/constants/constants.dart';
 import 'package:incredibleman/providers/BannerAdModel/banner_ad.dart';
-import 'package:incredibleman/providers/LocalNotificationService/local_notification_services.dart';
-import 'package:incredibleman/providers/orderModel/order_model.dart';
 import 'package:incredibleman/providers/providerdata.dart';
 import 'package:incredibleman/providers/reviews/reviews_model.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_create_order.dart';
@@ -18,7 +16,6 @@ import 'package:incredibleman/providers/woocommerceModels/woo_product_category.d
 import 'package:incredibleman/screens/CartScreen/cart_screen.dart';
 import 'package:incredibleman/screens/CategoryScreen/category_screen.dart';
 import 'package:incredibleman/screens/LoginScreen/login_screen.dart';
-import 'package:incredibleman/screens/NotificationTapScreen/notification_tap_screen.dart';
 import 'package:incredibleman/screens/ProductDetailScreen/product_detail_screen.dart';
 import 'package:incredibleman/screens/TabScreens/account_screen.dart';
 import 'package:incredibleman/screens/TabScreens/im_combo_screen.dart';
@@ -49,11 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool login = false;
 
-  late int userid;
+  int? userid;
 
   late List<WooProductCategory> category = [];
   WooCustomer? user;
-  late List<dynamic> orders = [];
+  late List<WooOrder> orders = [];
   late List<Reviews> productReviews = [];
 
   void hmmm() {
@@ -67,12 +64,13 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       if (message != null) {
-        print("notify");
         final data = message.data['id'];
         final name = message.data['name'];
         Get.to(() => CategoryScreen(
               id: data.toString(),
               name: name.toString(),
+              product: cro.newProducts,
+              user: user,
             ));
       }
     });
@@ -84,6 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Get.to(() => CategoryScreen(
             id: data.toString(),
             name: name.toString(),
+            product: cro.newProducts,
+            user: user,
             // login: login,
           ));
       // Get.to(() => NotificationTapScreen(
@@ -113,24 +113,24 @@ class _HomeScreenState extends State<HomeScreen> {
         try {
           userid = await CartData.wooCommerce.fetchLoggedInUserId();
 
-          user = await CartData.wooCommerce.getCustomerById(id: userid);
-          print(user!.firstName);
-          print(userid);
+          user = await CartData.wooCommerce.getCustomerById(id: userid!);
+          // print(user!.firstName);
+          // print(userid);
 
           login = true;
 
-          orders = await CartData.getAllOrder(userid: userid);
+          // orders = await CartData.getAllOrder(userid: userid);
 
           // ignore: empty_catches, unused_catch_clause
         } on WooCommerceError catch (e) {
-          print(e);
+          // print(e);
         }
       }
       setState(() {
         _loading = false;
       });
     } catch (e) {
-      print(e);
+      // print(e);
       Get.defaultDialog(
           title: "Opps... ",
           content: const Text("something Went Wrong Please Try Again"));
@@ -1244,7 +1244,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     product: cro.newProducts,
                   ),
             OrderListScreen(
-              orders: orders,
+              login: login,
+              userid: userid,
             ),
             _loading
                 ? Container()

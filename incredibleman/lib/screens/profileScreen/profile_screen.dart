@@ -399,10 +399,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const Text("something Went Wrong Please Try Again"),
                     );
                   }
-                  print(_email.text);
-                  print(_dd.text);
-                  print(_mm.text);
-                  print(_yyyy.text);
+                  // print(_email.text);
+                  // print(_dd.text);
+                  // print(_mm.text);
+                  // print(_yyyy.text);
                 }
               },
               icon: const Icon(Icons.arrow_forward),
