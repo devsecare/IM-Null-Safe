@@ -23,7 +23,7 @@ class OrderListScreen extends StatelessWidget {
       body: FutureBuilder(
           future: CartData.getAllOrder(userid: userid),
           builder: (context, AsyncSnapshot<List<WooOrder>> catData) {
-            if (catData.data!.isEmpty) {
+            if (catData.data == null || catData.data!.isEmpty) {
               return const Center(
                 child: Text("No Orders Yet"),
               );

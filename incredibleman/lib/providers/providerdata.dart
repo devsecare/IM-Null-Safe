@@ -124,10 +124,10 @@ class CartData extends GetxController {
     }
   }
 
-  static Future<List<ShippingModel>> shippingDatat() async {
+  static Future<List<ShippingModel>> shippingDatat({required int id}) async {
     try {
       var response = await http.get(Uri.parse(
-          "https://www.incredibleman.in/wp-json/wc/v3/shipping/zones/1/methods?consumer_secret=cs_e0d2efcba59453a6883a91b0bbf241d699898151&consumer_key=ck_e9df4b7d747d2ccc30946837db4d3ef80b215535"));
+          "https://www.incredibleman.in/wp-json/wc/v3/shipping/zones/$id/methods?consumer_secret=cs_e0d2efcba59453a6883a91b0bbf241d699898151&consumer_key=ck_e9df4b7d747d2ccc30946837db4d3ef80b215535"));
 
       final shippingModel = shippingModelFromJson(response.body);
       return shippingModel;

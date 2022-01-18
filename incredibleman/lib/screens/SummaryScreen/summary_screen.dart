@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:incredibleman/constants/constants.dart';
 import 'package:incredibleman/providers/carttestModel/cartbox.dart';
+import 'package:incredibleman/providers/couponModel/coupon_model.dart';
 import 'package:incredibleman/providers/providerdata.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_customer.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_order_payload.dart';
@@ -47,6 +48,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
   var coupencode;
   var coupenid;
 
+  String? userEmail;
+
   late String shippingTitle;
   late String shippingid;
   @override
@@ -59,6 +62,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     getAddre();
+    userEmail = widget.user!.email;
+    // userEmail = "meet.ecareinfoway@gmail.com";
 
     // lineItem();
   }
@@ -94,72 +99,476 @@ class _SummaryScreenState extends State<SummaryScreen> {
   }
 
   ///
+  ///
+  ///
+
+  couponError() {
+    setState(() {
+      _loading = false;
+    });
+    Get.snackbar(
+      "Invalid Coupon",
+      "This Coupon is Invalid ",
+      backgroundColor: Colors.redAccent,
+      colorText: Colors.white,
+    );
+  }
 
   getAddre() async {
+    print("aa first ${widget.price}");
     var ty = igst / 100;
     var hh = ty + 1;
+    print(ty);
+    print(hh);
 
-    exitGST = (double.parse(widget.price) / hh).roundToDouble();
-    // print("aa first ${widget.price}");
+    // exitGST = (double.parse(widget.price) / hh).roundToDouble();
+    exitGST = double.parse(widget.price);
+    print(exitGST);
+
     if (widget.user!.billing!.state == "GUJARAT" ||
         widget.user!.billing!.state == "GUJRAT" ||
         widget.user!.billing!.state == "Gujarat" ||
         widget.user!.billing!.state == "gujarat" ||
         widget.user!.billing!.state == "GJ" ||
         widget.user!.billing!.state == "gj") {
-      // print('aaa value che gst vagr in $exitGST');
+      print("aa first ${widget.price}");
+      print("aaa exit gst vagr na $exitGST");
       cgst = (exitGST * 9) / 100;
+      print(cgst);
       sgst = (exitGST * 9) / 100;
-      // print(cgst);
-      // print(sgst);
-      // var jj = cgst + sgst;
-      // print("aa to peli pde $jj");
-      // exitGST = double.parse(widget.price) - jj;
-      // print("aa to jovi pde $exitGST");
+      print(sgst);
+      gstadd = (exitGST * igst) / 100;
+      print(gstadd);
+      gstvalue = (exitGST + gstadd).roundToDouble();
+      print(gstvalue);
+
       guj = true;
-      // print("AA Gujarat Vado Che");
+      getShipping(isgujju: guj);
+      print("gujju che uper");
+      return;
     }
     gstadd = (exitGST * igst) / 100;
+    print(gstadd);
     gstvalue = (exitGST + gstadd).roundToDouble();
-    // print("aa gst value che $gstadd");
+    print(gstvalue);
+    getShipping(isgujju: guj);
+    print("guuju nathi uper");
+  }
 
-    //  var addre = await CartData.woocommerce
-    //         .getAllShippingZoneMethods(shippingZoneId: 1);
-    // print(addre);
+  couponCheckFlat({
+    required List<CouponModel> cop,
+    int? usageLimit,
+    int? usagecount,
+    List<String>? emailcheck,
+    List<String>? usedby,
+  }) {
+    if (cop[0].usageLimit != null &&
+        emailcheck!.isNotEmpty &&
+        cop[0].usageLimitPerUser != null) {
+      print("badhu j che ");
+      if (usagecount! < cop[0].usageLimit!) {
+        print("flat exp nthi and vapri sakai che hji");
+        if (emailcheck.contains(userEmail)) {
+          print("flat exp nthi and email contain kre che");
+          if (usedby!.isNotEmpty) {
+            var i = 0;
+            for (var item in cop[0].usedBy!) {
+              if (item == userEmail.toString()) {
+                i = i + 1;
+              }
+            }
+            if (cop[0].usageLimitPerUser! > i) {
+              print("vapri sake che");
+              coupenFlat(cop: cop);
+              return;
+            } else {
+              print("used kri lithu che ");
 
-    try {
-      var ch = await CartData.shippingDatat();
+              couponError();
+              return;
+            }
+          } else {
+            print("used j nai thayu hji");
+            coupenFlat(cop: cop);
+            return;
+          }
+        } else {
+          print("email contain krti nathi");
+          couponError();
+          return;
+        }
+      } else {
+        print("count limit pati gai che na vaprai");
+        couponError();
+        return;
+      }
+    } else if (usageLimit != null) {
+      print("aa limit check kre che flat");
+      if (usagecount! < cop[0].usageLimit!) {
+        print("hji vapri sake che flat");
+        if (cop[0].emailRestrictions!.isNotEmpty &&
+            emailcheck!.contains(userEmail)) {
+          print("email contain kre che flat");
+          if (usedby!.isNotEmpty) {
+            var i = 0;
+            for (var item in cop[0].usedBy!) {
+              if (item == userEmail.toString()) {
+                i = i + 1;
+              }
+            }
+            if (cop[0].usageLimitPerUser! > i) {
+              print("vapri sake che");
+              coupenFlat(cop: cop);
+              return;
+            } else {
+              print("used kri lithu che ");
+              couponError();
+              return;
+            }
+          } else {
+            print("used j nai thayu hji");
+            coupenFlat(cop: cop);
+            return;
+          }
+        } else if (cop[0].emailRestrictions!.isNotEmpty &&
+            !emailcheck!.contains(userEmail)) {
+          print("email che j pn match nathi thati flat ");
+          couponError();
+          return;
+        } else {
+          print("email res  ema nathi flat");
+          coupenFlat(cop: cop);
+          return;
+        }
+      } else {
+        print("na chale flat");
+        couponError();
+      }
+    } else if (cop[0].emailRestrictions!.isNotEmpty &&
+        emailcheck!.contains(userEmail)) {
+      print("usagelimit nthi pn email res che flat");
+      if (usedby!.isNotEmpty) {
+        print("usedby che flat");
+        var i = 0;
+        for (var item in cop[0].usedBy!) {
+          if (item == userEmail.toString()) {
+            i = i + 1;
+          }
+        }
+        if (cop[0].usageLimitPerUser! > i) {
+          print("vapri sake che");
+          coupenFlat(cop: cop);
+          return;
+        } else {
+          print("used kri lithu che ");
 
-      var com = double.parse(ch[1].settings!.minAmount!.value!);
-      // print("aa check thse $com");
-      if (double.parse(widget.price) < com) {
-        // print("aa biju ${widget.price}");
+          couponError();
+          return;
+        }
+      } else {
+        print("used j nai thayu hji");
+        coupenFlat(cop: cop);
+        return;
+      }
+    } else if (cop[0].usageLimitPerUser != null) {
+      print("aama user pr used krvani limit api che flat");
+      if (usedby!.isNotEmpty) {
+        print("usedby che flat ");
+        var i = 0;
+        for (var item in cop[0].usedBy!) {
+          if (item == userEmail.toString()) {
+            i = i + 1;
+          }
+        }
+        if (cop[0].usageLimitPerUser! > i) {
+          print("vapri sake che");
+          coupenFlat(cop: cop);
+          return;
+        } else {
+          print("used kri lithu che ");
 
-        // print(ch[0].settings!.cost!.value);
+          couponError();
+          return;
+        }
+      } else {
+        print("used j nai thayu hji khli limit che used per user flat");
+        coupenFlat(cop: cop);
+        return;
+      }
+    } else {
+      print("badhu j khli che");
+      coupenFlat(cop: cop);
+    }
+  }
+
+  couponCheckPer({
+    required List<CouponModel> cop,
+    int? usageLimit,
+    int? usagecount,
+    List<String>? emailcheck,
+    List<String>? usedby,
+  }) {
+    if (cop[0].usageLimit != null &&
+        emailcheck!.isNotEmpty &&
+        cop[0].usageLimitPerUser != null) {
+      print("badhu j che ");
+      if (usagecount! < cop[0].usageLimit!) {
+        print(" vapri sakai che hji");
+        if (emailcheck.contains(userEmail)) {
+          print("  email contain kre che");
+          if (usedby!.isNotEmpty) {
+            var i = 0;
+            for (var item in cop[0].usedBy!) {
+              if (item == userEmail.toString()) {
+                i = i + 1;
+              }
+            }
+            if (cop[0].usageLimitPerUser! > i) {
+              print("vapri sake che");
+              couponPer(cop: cop);
+              return;
+            } else {
+              print("used kri lithu che ");
+
+              couponError();
+              return;
+            }
+          } else {
+            print("used j nai thayu hji");
+            couponPer(cop: cop);
+            return;
+          }
+        } else {
+          print("email contain krti nathi");
+          couponError();
+          return;
+        }
+      } else {
+        print("count limit pati gai che na vaprai");
+        couponError();
+        return;
+      }
+    } else if (usageLimit != null) {
+      print("aa limit check kre che ");
+      if (usagecount! < cop[0].usageLimit!) {
+        print("hji vapri sake che ");
+        if (cop[0].emailRestrictions!.isNotEmpty &&
+            emailcheck!.contains(userEmail)) {
+          print("email contain kre che ");
+          if (usedby!.isNotEmpty) {
+            var i = 0;
+            for (var item in cop[0].usedBy!) {
+              if (item == userEmail.toString()) {
+                i = i + 1;
+              }
+            }
+            if (cop[0].usageLimitPerUser! > i) {
+              print("vapri sake che");
+              couponPer(cop: cop);
+              return;
+            } else {
+              print("used kri lithu che ");
+              couponError();
+              return;
+            }
+          } else {
+            print("used j nai thayu hji");
+            couponPer(cop: cop);
+            return;
+          }
+        } else if (cop[0].emailRestrictions!.isNotEmpty &&
+            !emailcheck!.contains(userEmail)) {
+          print("email che j pn match nathi thati  ");
+          couponError();
+          return;
+        } else if (emailcheck!.isEmpty && cop[0].usageLimitPerUser != null) {
+          print(
+              "aa ma usage limit che and email res nathi pn user per limit che");
+          if (usedby!.isNotEmpty) {
+            var i = 0;
+            for (var item in usedby) {
+              if (item == userEmail.toString()) {
+                i = i + 1;
+              }
+            }
+            if (cop[0].usageLimitPerUser! > i) {
+              print("vapri sake che");
+              couponPer(cop: cop);
+              return;
+            } else {
+              print("used kri lithu che ");
+              couponError();
+              return;
+            }
+          } else {
+            print("used j nai thayu hji");
+            couponPer(cop: cop);
+            return;
+          }
+        } else {
+          print("jo aa");
+          if (usedby!.isNotEmpty) {
+            var i = 0;
+            for (var item in usedby) {
+              if (item == userEmail.toString()) {
+                i = i + 1;
+              }
+            }
+            if (cop[0].usageLimitPerUser! > i) {
+              print("vapri sake che");
+              couponPer(cop: cop);
+              return;
+            } else {
+              print("used kri lithu che ");
+              couponError();
+              return;
+            }
+          } else {
+            print("used j nai thayu hji");
+            couponPer(cop: cop);
+            return;
+          }
+        }
+      } else {
+        print("na chale ");
+        couponError();
+      }
+    } else if (cop[0].emailRestrictions!.isNotEmpty &&
+        emailcheck!.contains(userEmail)) {
+      print("usagelimit nthi pn email res che ");
+      if (usedby!.isNotEmpty) {
+        print("usedby che ");
+        var i = 0;
+        for (var item in cop[0].usedBy!) {
+          if (item == userEmail.toString()) {
+            i = i + 1;
+          }
+        }
+        if (cop[0].usageLimitPerUser! > i) {
+          print("vapri sake che");
+          couponPer(cop: cop);
+          return;
+        } else {
+          print("used kri lithu che ");
+
+          couponError();
+          return;
+        }
+      } else {
+        print("used j nai thayu hji");
+        couponPer(cop: cop);
+        return;
+      }
+    } else if (cop[0].emailRestrictions!.isNotEmpty &&
+        !emailcheck!.contains(userEmail)) {
+      print("email che pn apde kaamni nathi ");
+
+      couponError();
+      return;
+    } else if (cop[0].usageLimitPerUser != null) {
+      print("aama user pr used krvani limit api che ");
+      if (usedby!.isNotEmpty) {
+        print("usedby che ");
+        var i = 0;
+        for (var item in cop[0].usedBy!) {
+          if (item == userEmail.toString()) {
+            i = i + 1;
+          }
+        }
+        if (cop[0].usageLimitPerUser! > i) {
+          print("vapri sake che");
+          couponPer(cop: cop);
+          return;
+        } else {
+          print("used kri lithu che ");
+
+          couponError();
+          return;
+        }
+      } else {
+        print("used j nai thayu hji khli limit che used per user");
+        couponPer(cop: cop);
+        return;
+      }
+    } else {
+      print("badhu j khli che");
+      couponPer(cop: cop);
+    }
+  }
+
+  couponPer({required List<CouponModel> cop}) {
+    setState(() {
+      var couponvalue1 = double.parse(cop[0].amount!);
+      var dd = couponvalue1 / 100;
+
+      couponvalue = (finalprice * dd as double).roundToDouble();
+
+      finalprice = (finalprice - couponvalue as double).roundToDouble();
+
+      coupencode = cop[0].code;
+      coupenid = cop[0].id;
+
+      _loading = false;
+    });
+  }
+
+  coupenFlat({required List<CouponModel> cop}) {
+    setState(() {
+      var couponvalue1 = double.parse(cop[0].amount!);
+      couponvalue = couponvalue1;
+
+      finalprice = finalprice - couponvalue1;
+
+      coupencode = cop[0].code;
+      coupenid = cop[0].id;
+      print("aaa che final  vado price $finalprice");
+
+      _loading = false;
+    });
+  }
+
+  getShipping({required bool isgujju}) async {
+    if (isgujju) {
+      try {
+        var ch = await CartData.shippingDatat(id: 2);
+        print("gujju che niche");
+
         setState(() {
           shipvalue = int.parse(ch[0].settings!.cost!.value!);
           shippingid = ch[0].methodId!;
           shippingTitle = ch[0].methodTitle!;
 
           finalprice = gstvalue + shipvalue;
-          // print("aa final gstvalue che $gstvalue");
-          // print("aa final shipvalue che $shipvalue");
-          // print("aa final value che $finalprice");
           _loading = false;
         });
-      } else {
-        // print("aa triju ${widget.price}");
-        setState(() {
-          shippingid = ch[1].methodId!;
-          shippingTitle = ch[1].methodTitle!;
-          finalprice = gstvalue;
-          _loading = false;
-        });
+      } catch (e) {
+        Get.defaultDialog(
+            title: "Ooops...",
+            content: const Text("Somthing went wrong please try again"));
       }
-    } catch (e) {
-      Get.defaultDialog(
-          title: "Ooops...",
-          content: const Text("Somthing went wrong please try again"));
+    } else {
+      try {
+        var ch = await CartData.shippingDatat(id: 1);
+        print("guuju nathi niche ");
+        setState(() {
+          shipvalue = int.parse(ch[0].settings!.cost!.value!);
+          shippingid = ch[0].methodId!;
+          shippingTitle = ch[0].methodTitle!;
+
+          finalprice = gstvalue + shipvalue;
+          print("aa final gstvalue che $gstvalue");
+          print("aa final shipvalue che $shipvalue");
+          print("aa final value che $finalprice");
+          _loading = false;
+        });
+
+        // print("aa check thse $com");
+
+      } catch (e) {
+        Get.defaultDialog(
+            title: "Ooops...",
+            content: const Text("Somthing went wrong please try again"));
+      }
     }
   }
 
@@ -169,54 +578,81 @@ class _SummaryScreenState extends State<SummaryScreen> {
     });
     try {
       var cop = await CartData.couponCheck(code: code);
-      // print(cop[0].dateExpires);
+      var disType = cop[0].discountType;
 
-      var now = DateTime.now();
-      var check = now.isBefore(DateTime.parse(cop[0].dateExpires));
-      // print(check);
-      if (cop.isEmpty || !check) {
-        // print("naaa paade che coupon");
-        setState(() {
-          _loading = false;
-        });
-        Get.snackbar(
-          "Invalid Coupon",
-          "This Coupon is Invalid ",
-          backgroundColor: Colors.white,
-        );
+      var usageLimit = cop[0].usageLimit;
+      var emailcheck = cop[0].emailRestrictions;
+
+      // var limitperuser = cop[0].usageLimitPerUser;
+
+      var usedby = cop[0].usedBy;
+      // var usedby = [
+      //   'jayveersinh.ecareinfoway@gmail.com',
+      // ];
+      var usagecount = cop[0].usageCount;
+
+      print(disType);
+
+      if (cop[0].dateExpires != null) {
+        var now = DateTime.now();
+        var check = now.isBefore(DateTime.parse(cop[0].dateExpires));
+
+        if (cop.isEmpty || !check) {
+          setState(() {
+            _loading = false;
+          });
+          Get.snackbar(
+            "Expired Coupon",
+            "This coupon has expired. ",
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+          );
+        } else if (disType == "percent") {
+          couponCheckPer(
+            cop: cop,
+            usageLimit: usageLimit,
+            usagecount: usagecount,
+            emailcheck: emailcheck,
+            usedby: usedby,
+          );
+          ///////////////////
+        } else {
+          print("fixed cart");
+          couponCheckFlat(
+            cop: cop,
+            usageLimit: usageLimit,
+            usagecount: usagecount,
+            emailcheck: emailcheck,
+            usedby: usedby,
+          );
+        }
       } else {
-        setState(() {
-          // print(finalprice);
-          var couponvalue1 = double.parse(cop[0].amount!);
-          var dd = couponvalue1 / 100;
-          // print("aa devider che $dd");
-          couponvalue = (finalprice * dd as double).roundToDouble();
-          // print("aaa che multi  vado price $couponvalue");
-          finalprice = (finalprice - couponvalue as double).roundToDouble();
-
-          coupencode = cop[0].code;
-          coupenid = cop[0].id;
-          // print("aaa che final  vado price $finalprice");
-
-          // finalprice = finalprice - couponvalue;
-          // var dd = finalprice % couponvalue;
-
-          _loading = false;
-          // print(finalprice);
-        });
+        print("expired vagar nu che");
+        if (disType == "percent") {
+          print("percentage vadu che ");
+          couponCheckPer(
+            cop: cop,
+            usageLimit: usageLimit,
+            usagecount: usagecount,
+            emailcheck: emailcheck,
+            usedby: usedby,
+          );
+        } else {
+          print("flat amount   che ");
+          couponCheckFlat(
+            cop: cop,
+            usageLimit: usageLimit,
+            usagecount: usagecount,
+            emailcheck: emailcheck,
+            usedby: usedby,
+          );
+        }
       }
     } catch (e) {
-      setState(() {
-        _loading = false;
-      });
+      print("aa error vado block che $e");
 
       // print("aa error che $e");
-      Get.snackbar(
-        "Invalid Coupon",
-        "This Coupon is Invalid ",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
+      couponError();
     }
   }
 
@@ -530,7 +966,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       ),
                                     )
                                   : Text(
-                                      "Shipping Rate",
+                                      "Shipping $shippingTitle",
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w600,
                                       ),

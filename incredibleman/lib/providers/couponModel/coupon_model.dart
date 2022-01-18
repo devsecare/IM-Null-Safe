@@ -47,10 +47,10 @@ class CouponModel {
   dynamic dateExpiresGmt;
   int? usageCount;
   bool? individualUse;
-  List<dynamic>? productIds;
+  List<int>? productIds;
   List<dynamic>? excludedProductIds;
   int? usageLimit;
-  dynamic usageLimitPerUser;
+  int? usageLimitPerUser;
   dynamic limitUsageToXItems;
   bool? freeShipping;
   List<dynamic>? productCategories;
@@ -59,7 +59,7 @@ class CouponModel {
   String? minimumAmount;
   String? maximumAmount;
   List<String>? emailRestrictions;
-  List<dynamic>? usedBy;
+  List<String>? usedBy;
   List<MetaDatum>? metaData;
   Links? links;
 
@@ -73,7 +73,7 @@ class CouponModel {
         dateExpiresGmt: json["date_expires_gmt"],
         usageCount: json["usage_count"],
         individualUse: json["individual_use"],
-        productIds: List<dynamic>.from(json["product_ids"].map((x) => x)),
+        productIds: List<int>.from(json["product_ids"].map((x) => x)),
         excludedProductIds:
             List<dynamic>.from(json["excluded_product_ids"].map((x) => x)),
         usageLimit: json["usage_limit"],
@@ -89,7 +89,7 @@ class CouponModel {
         maximumAmount: json["maximum_amount"],
         emailRestrictions:
             List<String>.from(json["email_restrictions"].map((x) => x)),
-        usedBy: List<dynamic>.from(json["used_by"].map((x) => x)),
+        usedBy: List<String>.from(json["used_by"].map((x) => x)),
         metaData: List<MetaDatum>.from(
             json["meta_data"].map((x) => MetaDatum.fromJson(x))),
         links: Links.fromJson(json["_links"]),
