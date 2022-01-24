@@ -276,3 +276,142 @@ class CartData extends GetxController {
     cartitme1();
   }
 }
+
+
+
+
+
+
+
+
+//  if (sample.hasError ||
+//                                               sample.data == null ||
+//                                               sample.data!.length == 0) {
+//                                             print("aaa thai che error ");
+//                                             return const Center(
+//                                               child: Text("No Sample"),
+//                                             );
+//                                           } else if (sample.data!.isNotEmpty) {
+//                                             category = sample.data;
+//                                             return SingleChildScrollView(
+//                                               child: Column(
+//                                                 children: [
+//                                                   const SizedBox(
+//                                                     height: 20.0,
+//                                                   ),
+//                                                   Text(
+//                                                     "Add Sample Prodcuts",
+//                                                     style: GoogleFonts.poppins(
+//                                                       fontSize: 15.0,
+//                                                       fontWeight:
+//                                                           FontWeight.bold,
+//                                                     ),
+//                                                   ),
+//                                                   const SizedBox(
+//                                                     height: 20.0,
+//                                                   ),
+//                                                   ListView.builder(
+//                                                       itemCount:
+//                                                           category!.length,
+//                                                       shrinkWrap: true,
+//                                                       physics:
+//                                                           const NeverScrollableScrollPhysics(),
+//                                                       itemBuilder:
+//                                                           (context, index) {
+//                                                         final cat =
+//                                                             category![index];
+//                                                         //  CartBox dd = contro.tcart[index];
+//                                                         return Padding(
+//                                                           padding:
+//                                                               const EdgeInsets
+//                                                                   .all(8.0),
+//                                                           child:
+//                                                               SampleContainer(
+//                                                             name: cat.name!,
+//                                                             url: cat.images![0]
+//                                                                 .src!,
+//                                                             add: () {
+//                                                               var x = contro
+//                                                                   .tcart
+//                                                                   ?.where((element) =>
+//                                                                       element
+//                                                                           .sample ==
+//                                                                       false)
+//                                                                   .toList();
+//                                                               if (double.parse(contro
+//                                                                           .testTotal
+//                                                                           .value) >=
+//                                                                       1200.0 &&
+//                                                                   x!.length <
+//                                                                       2) {
+//                                                                 Hive.box(
+//                                                                         TestBox)
+//                                                                     .put(
+//                                                                         cat.id,
+//                                                                         CartBox(
+//                                                                           1,
+//                                                                           cat.id!,
+//                                                                           cat.name!,
+//                                                                           cat.price!,
+//                                                                           cat.images![0]
+//                                                                               .src!,
+//                                                                           false,
+//                                                                         ));
+//                                                                 contro
+//                                                                     .testData();
+//                                                                 getData();
+//                                                                 print(
+//                                                                     "aa kyu che 1200");
+//                                                               } else if (double.parse(contro
+//                                                                           .testTotal
+//                                                                           .value) >=
+//                                                                       700.0 &&
+//                                                                   double.parse(contro
+//                                                                           .testTotal
+//                                                                           .value) <
+//                                                                       1200.0 &&
+//                                                                   x!.length ==
+//                                                                       0) {
+//                                                                 Hive.box(
+//                                                                         TestBox)
+//                                                                     .put(
+//                                                                         cat.id,
+//                                                                         CartBox(
+//                                                                           1,
+//                                                                           cat.id!,
+//                                                                           cat.name!,
+//                                                                           cat.price!,
+//                                                                           cat.images![0]
+//                                                                               .src!,
+//                                                                           false,
+//                                                                         ));
+//                                                                 contro
+//                                                                     .testData();
+//                                                                 getData();
+//                                                                 print(
+//                                                                     "aa kyu che");
+//                                                               } else {
+//                                                                 Get.snackbar(
+//                                                                   "Sample Already Added",
+//                                                                   "No More Sample ",
+//                                                                   backgroundColor:
+//                                                                       Colors
+//                                                                           .black54,
+//                                                                   colorText:
+//                                                                       Colors
+//                                                                           .white,
+//                                                                 );
+//                                                               }
+//                                                             },
+//                                                           ),
+//                                                         );
+//                                                       }),
+//                                                 ],
+//                                               ),
+//                                             );
+//                                           } else {
+//                                             return const Center(
+//                                                 child:
+//                                                     CircularProgressIndicator());
+//                                           }
+//                                         }),

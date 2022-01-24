@@ -18,6 +18,7 @@ const String TestBox = "TestBox";
 // final bool nav = false;
 
 Future<void> backgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
   // ignore: avoid_print
   print("aa background ${message.data.toString()}");
 
@@ -34,6 +35,7 @@ void main() async {
   LocalNotificationService.initialize();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
   runApp(MyApp());
 }
 

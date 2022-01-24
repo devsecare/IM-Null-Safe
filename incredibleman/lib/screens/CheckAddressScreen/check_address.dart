@@ -183,7 +183,7 @@ class _CheckAddressState extends State<CheckAddress> {
             minimumSize: const Size(335, 50),
           ),
           child: const Text(
-            "Proccess to Payment",
+            "Proceed to Payment",
             style: TextStyle(
               color: black,
             ),

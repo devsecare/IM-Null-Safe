@@ -143,19 +143,37 @@ class _CartScreenState extends State<CartScreen> {
               children: [
                 double.parse(contro.testTotal.value) >= 700.0
                     ? ElevatedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
+                          // var check = await CartData.wooCommerce
+                          //     .getProducts(category: "15");
+                          // print(check.length);
+
                           showCupertinoModalBottomSheet(
                               context: context,
                               expand: true,
                               builder: (context) => Material(
                                     child: FutureBuilder(
-                                        future: CartData.wooCommerce
-                                            .getProducts(category: "15"),
+                                        future:
+                                            CartData.wooCommerce.getProducts(
+                                          category: "15",
+                                          status: "publish",
+                                        ),
                                         builder: (context,
                                             AsyncSnapshot<List<WooProduct>>
                                                 sample) {
                                           category = sample.data;
-                                          if (sample.hasData) {
+                                          if (sample.connectionState ==
+                                              ConnectionState.waiting) {
+                                            print("aaa thai che error ");
+                                            return const Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                            // return const Center(
+                                            //   child: Text("No Sample"),
+                                            // );
+                                          } else if (sample.data!.isNotEmpty) {
+                                            // category = sample.data;
+
                                             return SingleChildScrollView(
                                               child: Column(
                                                 children: [
@@ -175,7 +193,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   ),
                                                   ListView.builder(
                                                       itemCount:
-                                                          category!.length,
+                                                          category?.length,
                                                       shrinkWrap: true,
                                                       physics:
                                                           const NeverScrollableScrollPhysics(),
@@ -192,7 +210,8 @@ class _CartScreenState extends State<CartScreen> {
                                                               SampleContainer(
                                                             name: cat.name!,
                                                             url: cat.images![0]
-                                                                .src!,
+                                                                    .src ??
+                                                                "https://incredibleman-174dc.kxcdn.com/wp-content/uploads/2021/09/pomade.png",
                                                             add: () {
                                                               var x = contro
                                                                   .tcart
@@ -223,6 +242,8 @@ class _CartScreenState extends State<CartScreen> {
                                                                 contro
                                                                     .testData();
                                                                 getData();
+                                                                print(
+                                                                    "aa kyu che 1200");
                                                               } else if (double.parse(contro
                                                                           .testTotal
                                                                           .value) >=
@@ -249,6 +270,16 @@ class _CartScreenState extends State<CartScreen> {
                                                                 contro
                                                                     .testData();
                                                                 getData();
+                                                                Get.snackbar(
+                                                                  "Sample Added",
+                                                                  "one Sample Added",
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .black54,
+                                                                  colorText:
+                                                                      Colors
+                                                                          .white,
+                                                                );
                                                               } else {
                                                                 Get.snackbar(
                                                                   "Sample Already Added",
@@ -268,10 +299,10 @@ class _CartScreenState extends State<CartScreen> {
                                                 ],
                                               ),
                                             );
+                                          } else {
+                                            return const Center(
+                                                child: Text("No Sample"));
                                           }
-                                          return const Center(
-                                              child:
-                                                  CircularProgressIndicator());
                                         }),
                                   ));
                         },

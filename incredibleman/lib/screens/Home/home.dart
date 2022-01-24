@@ -74,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ));
       }
     });
+
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       final data = event.data['id'];
       final name = event.data['name'];
@@ -364,6 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         builder: (context) => CartScreen(
                                               products: cro.newProducts,
                                               login: login,
+                                              user: user,
                                             )));
                               },
                               child: SizedBox(
@@ -592,8 +594,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               " Are you sure you want to Logout?"),
                                           actions: [
                                             ElevatedButton(
-                                                onPressed: () {
-                                                  CartData.wooCommerce
+                                                onPressed: () async {
+                                                  await CartData.wooCommerce
                                                       .logUserOut();
                                                   // getProducts();
                                                   // Get.back();
@@ -699,7 +701,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            "V0.0.1©Incredibleman.in",
+                            "V1.0.4 ©Incredibleman.in",
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w500,
                               fontSize: 10.0,

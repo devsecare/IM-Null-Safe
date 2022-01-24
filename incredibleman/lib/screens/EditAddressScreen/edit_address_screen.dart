@@ -202,21 +202,45 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                               const SizedBox(
                                 height: 5.0,
                               ),
-                              TextField(
-                                controller: _state
-                                  ..text = widget.user!.billing!.state!
-                                      .toUpperCase(),
-                                keyboardType: TextInputType.text,
-                                textCapitalization:
-                                    TextCapitalization.characters,
-                                decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(
-                                    left: 15,
+                              DropdownButtonFormField(
+                                  hint: const Text("Your state"),
+                                  isExpanded: true,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(8.0),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
                                   ),
-                                  hintText: "Your State",
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
+                                  items: state.map((e) {
+                                    return DropdownMenuItem<String>(
+                                      value: e,
+                                      child: Text(
+                                        e,
+                                        softWrap: false,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    _state.text = value!;
+                                  }),
+                              // TextField(
+                              //   controller: _state
+                              //     ..text = widget.user!.billing!.state!
+                              //         .toUpperCase(),
+                              //   keyboardType: TextInputType.text,
+                              //   textCapitalization:
+                              //       TextCapitalization.characters,
+                              //   decoration: const InputDecoration(
+                              //     contentPadding: EdgeInsets.only(
+                              //       left: 15,
+                              //     ),
+                              //     hintText: "Your State",
+                              //     border: OutlineInputBorder(),
+                              //   ),
+                              // ),
                             ],
                           )),
                         ],

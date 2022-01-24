@@ -39,7 +39,7 @@ class SampleContainer extends StatelessWidget {
               Text(
                 name,
                 style: GoogleFonts.poppins(
-                  color: Colors.green,
+                  color: Colors.black,
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
                 ),
@@ -63,7 +63,7 @@ class SampleContainer extends StatelessWidget {
           onPressed: add,
           style: ElevatedButton.styleFrom(
               primary: Colors.black, fixedSize: const Size(50, 50)),
-          child: const Text("ADD ✔"),
+          child: const Text("ADD"),
         ),
       ],
     );

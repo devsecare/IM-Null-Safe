@@ -26,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool editbirthday = false;
   late DateTime selectedDate;
   late List birthday;
+  bool _loading = false;
 
   getBirthDay() {
     birthday = widget.user.metaData!
@@ -121,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             }
                             return null;
                           },
-                          // controller: _username,
+
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: 'Enter Username',
@@ -371,17 +372,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               onPressed: () async {
                 if (_formkey.currentState!.validate()) {
+                  setState(() {
+                    _loading = true;
+                  });
                   //////////////////////////////
                   /////////////////////////////
                   ////////////////////////////
                   try {
                     WooCustomer updateCustomer = WooCustomer(
-                        id: widget.user.id,
-                        email: widget.user.email,
-                        metaData: [
-                          WooCustomerMetaData(widget.user.id, "birthday_field",
-                              "${_yyyy.text} - ${_mm.text} -${_dd.text}")
-                        ]);
+                      id: widget.user.id,
+                      email: widget.user.email,
+                      metaData: [
+                        WooCustomerMetaData(widget.user.id, "birthday_field",
+                            "${_yyyy.text} - ${_mm.text} -${_dd.text}")
+                      ],
+                      billing: Billing(phone: _mobile.text),
+                    );
                     await CartData.wooCommerce.oldUpdateCustomer(
                       wooCustomer: updateCustomer,
                     );
@@ -392,13 +398,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       colorText: Colors.white,
                       backgroundColor: Colors.black,
                     );
+                    setState(() {
+                      _loading = false;
+                    });
                   } catch (e) {
                     Get.defaultDialog(
                       title: "Ooops...",
                       content:
                           const Text("something Went Wrong Please Try Again"),
                     );
+                    setState(() {
+                      _loading = false;
+                    });
                   }
+                  setState(() {
+                    _loading = false;
+                  });
                   // print(_email.text);
                   // print(_dd.text);
                   // print(_mm.text);
@@ -406,7 +421,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }
               },
               icon: const Icon(Icons.arrow_forward),
-              label: const Text("Save"),
+              label: _loading
+                  ? const CircularProgressIndicator.adaptive()
+                  : const Text("Save"),
             ),
             const SizedBox(
               height: 25.0,

@@ -61,7 +61,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-    getAddre();
+    getAddre(price: widget.price);
+    // gstCal(price: widget.price.toString());
     userEmail = widget.user!.email;
     // userEmail = "meet.ecareinfoway@gmail.com";
 
@@ -101,6 +102,39 @@ class _SummaryScreenState extends State<SummaryScreen> {
   ///
   ///
   ///
+  ///
+  ///
+  gstCal({price}) async {
+    var ty = igst / 100;
+    var hh = ty + 1;
+    print(ty);
+    print(hh);
+
+    exitGST = (double.parse(price) / hh).roundToDouble();
+
+    if (guj) {
+      cgst = (exitGST * 9) / 100;
+      print(cgst);
+      sgst = (exitGST * 9) / 100;
+      print(sgst);
+      gstadd = (exitGST * igst) / 100;
+      print(gstadd);
+      gstvalue = (exitGST + gstadd).roundToDouble();
+      print("aa jo to value $gstvalue");
+      print("aa shiping value jo to $shipvalue");
+      finalprice = gstvalue + shipvalue;
+      print(
+          " aa guju che and final price che gst and shipping sathe $finalprice");
+    } else {
+      gstadd = (exitGST * igst) / 100;
+      print(gstadd);
+      gstvalue = (exitGST + gstadd).roundToDouble();
+      print(gstvalue);
+      finalprice = gstvalue + shipvalue;
+      print(
+          " aa guju che and final price che gst and shipping sathe $finalprice");
+    }
+  }
 
   couponError() {
     setState(() {
@@ -114,16 +148,16 @@ class _SummaryScreenState extends State<SummaryScreen> {
     );
   }
 
-  getAddre() async {
-    print("aa first ${widget.price}");
+  getAddre({price}) async {
+    print("aa first $price");
     var ty = igst / 100;
     var hh = ty + 1;
     print(ty);
     print(hh);
 
-    // exitGST = (double.parse(widget.price) / hh).roundToDouble();
-    exitGST = double.parse(widget.price);
-    print(exitGST);
+    exitGST = (double.parse(price) / hh).roundToDouble();
+    // // exitGST = double.parse(widget.price);
+    // print(exitGST);
 
     if (widget.user!.billing!.state == "GUJARAT" ||
         widget.user!.billing!.state == "GUJRAT" ||
@@ -131,8 +165,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
         widget.user!.billing!.state == "gujarat" ||
         widget.user!.billing!.state == "GJ" ||
         widget.user!.billing!.state == "gj") {
-      print("aa first ${widget.price}");
-      print("aaa exit gst vagr na $exitGST");
       cgst = (exitGST * 9) / 100;
       print(cgst);
       sgst = (exitGST * 9) / 100;
@@ -295,9 +327,19 @@ class _SummaryScreenState extends State<SummaryScreen> {
         coupenFlat(cop: cop);
         return;
       }
+    } else if (emailcheck!.isNotEmpty) {
+      print("khli aa emails mate j used thse flat");
+      if (emailcheck.contains(userEmail)) {
+        coupenFlat(cop: cop);
+        return;
+      } else {
+        couponError();
+        return;
+      }
     } else {
       print("badhu j khli che");
       coupenFlat(cop: cop);
+      return;
     }
   }
 
@@ -313,9 +355,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
         cop[0].usageLimitPerUser != null) {
       print("badhu j che ");
       if (usagecount! < cop[0].usageLimit!) {
-        print(" vapri sakai che hji");
+        print(" exp nthi and vapri sakai che hji");
         if (emailcheck.contains(userEmail)) {
-          print("  email contain kre che");
+          print(" exp nthi and email contain kre che");
           if (usedby!.isNotEmpty) {
             var i = 0;
             for (var item in cop[0].usedBy!) {
@@ -378,59 +420,16 @@ class _SummaryScreenState extends State<SummaryScreen> {
           }
         } else if (cop[0].emailRestrictions!.isNotEmpty &&
             !emailcheck!.contains(userEmail)) {
-          print("email che j pn match nathi thati  ");
+          print("email che j pn match nathi thati flat ");
           couponError();
           return;
-        } else if (emailcheck!.isEmpty && cop[0].usageLimitPerUser != null) {
-          print(
-              "aa ma usage limit che and email res nathi pn user per limit che");
-          if (usedby!.isNotEmpty) {
-            var i = 0;
-            for (var item in usedby) {
-              if (item == userEmail.toString()) {
-                i = i + 1;
-              }
-            }
-            if (cop[0].usageLimitPerUser! > i) {
-              print("vapri sake che");
-              couponPer(cop: cop);
-              return;
-            } else {
-              print("used kri lithu che ");
-              couponError();
-              return;
-            }
-          } else {
-            print("used j nai thayu hji");
-            couponPer(cop: cop);
-            return;
-          }
         } else {
-          print("jo aa");
-          if (usedby!.isNotEmpty) {
-            var i = 0;
-            for (var item in usedby) {
-              if (item == userEmail.toString()) {
-                i = i + 1;
-              }
-            }
-            if (cop[0].usageLimitPerUser! > i) {
-              print("vapri sake che");
-              couponPer(cop: cop);
-              return;
-            } else {
-              print("used kri lithu che ");
-              couponError();
-              return;
-            }
-          } else {
-            print("used j nai thayu hji");
-            couponPer(cop: cop);
-            return;
-          }
+          print("email res  ema nathi flat");
+          couponPer(cop: cop);
+          return;
         }
       } else {
-        print("na chale ");
+        print("na chale flat");
         couponError();
       }
     } else if (cop[0].emailRestrictions!.isNotEmpty &&
@@ -459,16 +458,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
         couponPer(cop: cop);
         return;
       }
-    } else if (cop[0].emailRestrictions!.isNotEmpty &&
-        !emailcheck!.contains(userEmail)) {
-      print("email che pn apde kaamni nathi ");
-
-      couponError();
-      return;
     } else if (cop[0].usageLimitPerUser != null) {
       print("aama user pr used krvani limit api che ");
       if (usedby!.isNotEmpty) {
-        print("usedby che ");
+        print("usedby che  ");
         var i = 0;
         for (var item in cop[0].usedBy!) {
           if (item == userEmail.toString()) {
@@ -486,8 +479,17 @@ class _SummaryScreenState extends State<SummaryScreen> {
           return;
         }
       } else {
-        print("used j nai thayu hji khli limit che used per user");
+        print("used j nai thayu hji khli limit che used per user ");
         couponPer(cop: cop);
+        return;
+      }
+    } else if (emailcheck!.isNotEmpty) {
+      print("khli aa emails mate j used thse");
+      if (emailcheck.contains(userEmail)) {
+        couponPer(cop: cop);
+        return;
+      } else {
+        couponError();
         return;
       }
     } else {
@@ -500,10 +502,20 @@ class _SummaryScreenState extends State<SummaryScreen> {
     setState(() {
       var couponvalue1 = double.parse(cop[0].amount!);
       var dd = couponvalue1 / 100;
-
+      finalprice = finalprice - shipvalue;
       couponvalue = (finalprice * dd as double).roundToDouble();
 
       finalprice = (finalprice - couponvalue as double).roundToDouble();
+
+      // finalprice = finalprice + shipvalue;
+
+      if (finalprice < 0 || finalprice == 0) {
+        print("aa to minius ma che");
+        couponvalue = double.parse(widget.price);
+        finalprice = shipvalue;
+      } else {
+        gstCal(price: finalprice.toString());
+      }
 
       coupencode = cop[0].code;
       coupenid = cop[0].id;
@@ -516,8 +528,17 @@ class _SummaryScreenState extends State<SummaryScreen> {
     setState(() {
       var couponvalue1 = double.parse(cop[0].amount!);
       couponvalue = couponvalue1;
+      finalprice = finalprice - shipvalue;
 
       finalprice = finalprice - couponvalue1;
+      print("aaa che final  vado price coupon pachi $finalprice");
+      gstCal(price: finalprice.toString());
+
+      if (finalprice < 0 || finalprice == 0) {
+        print("aa to minius ma che flat");
+        couponvalue = double.parse(widget.price);
+        finalprice = shipvalue;
+      }
 
       coupencode = cop[0].code;
       coupenid = cop[0].id;
@@ -537,6 +558,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
           shipvalue = int.parse(ch[0].settings!.cost!.value!);
           shippingid = ch[0].methodId!;
           shippingTitle = ch[0].methodTitle!;
+          print("aa che final price shipping ma $finalprice");
 
           finalprice = gstvalue + shipvalue;
           _loading = false;
@@ -556,9 +578,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
           shippingTitle = ch[0].methodTitle!;
 
           finalprice = gstvalue + shipvalue;
-          print("aa final gstvalue che $gstvalue");
-          print("aa final shipvalue che $shipvalue");
-          print("aa final value che $finalprice");
+          // print("aa final gstvalue che $gstvalue");
+          // print("aa final shipvalue che $shipvalue");
+          // print("aa final value che $finalprice");
           _loading = false;
         });
 
@@ -726,12 +748,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 code: coupencode,
               )
             ],
-      // shippingLines: [
-      //   ShippingLines(
-      //     methodId: shippingid,
-      //     methodTitle: shippingTitle,
-      //   ),
-      // ],
+      shippingLines: [
+        ShippingLines(
+          methodId: shippingid,
+          methodTitle: shippingTitle,
+          total: shipvalue.toString(),
+        ),
+      ],
     );
 
     await CartData.wooCommerce.createOrder(orderPayload);
@@ -797,8 +820,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     ? const PriceLoading()
                     : ElevatedButton(
                         onPressed: () {
-                          openCheckOut();
-                          // orderDone("hdshsdhcbsj");
+                          // openCheckOut();
+                          orderDone("hdshsdhcbsj");
                         },
                         child: Text(
                           "PAY NOW",
