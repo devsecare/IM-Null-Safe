@@ -22,6 +22,12 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   // ignore: avoid_print
   print("aa background ${message.data.toString()}");
 
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true, // Required to display a heads up notification
+    badge: true,
+    sound: true,
+  );
+
   // LocalNotificationService.display(message);
 }
 

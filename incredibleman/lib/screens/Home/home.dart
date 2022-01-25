@@ -303,59 +303,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 accountEmail: Text(""),
                               ),
-                        // GestureDetector(
-                        //   onTap: () async {
-                        //     // LocalNotificationService.display(
-                        //     //   const RemoteMessage(
-                        //     //     notification: RemoteNotification(
-                        //     //       title: "70% OFF on Hair And Face Combo",
-                        //     //       body:
-                        //     //           "70% OFF on Hair And Face Combo, \nGrab This Sale and use INCREDIBLEMAN50 coupen code \nto get 50% addational Discount on Every Products",
-                        //     //     ),
-                        //     //   ),
-                        //     // );
 
-                        //     // Get.to(()=> ThankYouScreen());
-                        //   },
-                        //   child: SizedBox(
-                        //     width: double.infinity,
-                        //     height: 60,
-                        //     child: Padding(
-                        //       padding: const EdgeInsets.only(
-                        //         right: 30.0,
-                        //         left: 20.0,
-                        //       ),
-                        //       child: Row(
-                        //         children: [
-                        //           const Icon(
-                        //             Icons.notifications,
-                        //             color: Colors.black54,
-                        //           ),
-                        //           const SizedBox(
-                        //             width: 20.0,
-                        //           ),
-                        //           Text(
-                        //             "My Notification",
-                        //             style: GoogleFonts.poppins(
-                        //               fontWeight: FontWeight.w600,
-                        //             ),
-                        //           ),
-                        //           const Spacer(),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // const Padding(
-                        //   padding: EdgeInsets.only(
-                        //     top: 0.0,
-                        //     left: 20.0,
-                        //     right: 20.0,
-                        //   ),
-                        //   child: Divider(
-                        //     thickness: 1.8,
-                        //   ),
-                        // ),
                         Obx(() => GestureDetector(
                               onTap: () {
                                 Navigator.of(context).pop();
@@ -419,57 +367,346 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             )),
-                        Obx(() => GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop();
+                        Obx(
+                          () => GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
 
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => WishListScreen(
-                                              products: cro.newProducts,
-                                              login: login,
-                                              user: user,
-                                              nav: false,
-                                            )));
-                              },
-                              child: SizedBox(
-                                width: double.infinity,
-                                // color: Colors.red,
-                                height: 50,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    right: 30.0,
-                                    left: 20.0,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.favorite,
-                                        color: Colors.black54,
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => WishListScreen(
+                                            products: cro.newProducts,
+                                            login: login,
+                                            user: user,
+                                            nav: false,
+                                          )));
+                            },
+                            child: SizedBox(
+                              width: double.infinity,
+                              // color: Colors.red,
+                              height: 50,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  right: 30.0,
+                                  left: 20.0,
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.favorite,
+                                      color: Colors.black54,
+                                    ),
+                                    const SizedBox(
+                                      width: 20.0,
+                                    ),
+                                    Text(
+                                      "Wishlist",
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      const SizedBox(
-                                        width: 20.0,
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      cro.favItme.toString(),
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black45,
                                       ),
-                                      Text(
-                                        "Wishlist",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        cro.favItme.toString(),
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            )),
+                            ),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            top: 0.0,
+                            left: 20.0,
+                            right: 20.0,
+                            bottom: 0.0,
+                          ),
+                          child: Divider(
+                            thickness: 1.8,
+                          ),
+                        ),
+
+                        ///yeeeeeeeeeeeeeee
+                        ///
+                        GestureDetector(
+                          onTap: () {
+                            //73
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => CategoryScreen(
+                                  id: "73",
+                                  name: "IM Combo",
+                                  product: cro.newProducts,
+                                  user: user,
+                                  // login: login,
+                                ),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            // color: Colors.red,
+                            height: 50,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 30.0,
+                                left: 20.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    imcat,
+                                    scale: 3,
+                                  ),
+                                  const SizedBox(
+                                    width: 20.0,
+                                  ),
+                                  Text(
+                                    "IM Combo",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            //37
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => CategoryScreen(
+                                  id: "37",
+                                  name: "Beard",
+                                  product: cro.newProducts,
+                                  user: user,
+                                  // login: login,
+                                ),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            // color: Colors.red,
+                            height: 50,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 30.0,
+                                left: 20.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    breadcat,
+                                    scale: 3,
+                                  ),
+                                  const SizedBox(
+                                    width: 20.0,
+                                  ),
+                                  Text(
+                                    "Beard",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            //63
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => CategoryScreen(
+                                  id: "63",
+                                  name: "Hair",
+                                  product: cro.newProducts,
+                                  user: user,
+                                  // login: login,
+                                ),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            // color: Colors.red,
+                            height: 50,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 30.0,
+                                left: 20.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    haircat,
+                                    scale: 3,
+                                  ),
+                                  const SizedBox(
+                                    width: 20.0,
+                                  ),
+                                  Text(
+                                    "Hair",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            //65
+
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => CategoryScreen(
+                                  id: "65",
+                                  name: "Face",
+                                  product: cro.newProducts,
+                                  user: user,
+                                  // login: login,
+                                ),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            // color: Colors.red,
+                            height: 50,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 30.0,
+                                left: 20.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    facecat,
+                                    scale: 3,
+                                  ),
+                                  const SizedBox(
+                                    width: 20.0,
+                                  ),
+                                  Text(
+                                    "Face",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            //64
+
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => CategoryScreen(
+                                  id: "64",
+                                  name: "Body",
+                                  product: cro.newProducts,
+                                  user: user,
+                                  // login: login,
+                                ),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            // color: Colors.red,
+                            height: 50,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 30.0,
+                                left: 20.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    bodycat,
+                                    scale: 3,
+                                  ),
+                                  const SizedBox(
+                                    width: 20.0,
+                                  ),
+                                  Text(
+                                    "Body",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onTap: () {
+                            //68
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => CategoryScreen(
+                                  id: "68",
+                                  name: "Oral",
+                                  product: cro.newProducts,
+                                  user: user,
+                                  // login: login,
+                                ),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            // color: Colors.red,
+                            height: 50,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 30.0,
+                                left: 20.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    oralcat,
+                                    scale: 3,
+                                  ),
+                                  const SizedBox(
+                                    width: 20.0,
+                                  ),
+                                  Text(
+                                    "Oral",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                         const Padding(
                           padding: EdgeInsets.only(
                             top: 0.0,
@@ -594,36 +831,44 @@ class _HomeScreenState extends State<HomeScreen> {
                                               " Are you sure you want to Logout?"),
                                           actions: [
                                             ElevatedButton(
-                                                onPressed: () async {
-                                                  await CartData.wooCommerce
-                                                      .logUserOut();
-                                                  // getProducts();
-                                                  // Get.back();
+                                              onPressed: () async {
+                                                await CartData.wooCommerce
+                                                    .logUserOut();
+                                                // getProducts();
+                                                // Get.back();
 
-                                                  Navigator.of(context)
-                                                      .pushAndRemoveUntil(
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const HomeScreen(),
-                                                          ),
-                                                          (route) => false);
-                                                },
-                                                child: Text(
-                                                  "yes",
-                                                  style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                )),
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const HomeScreen(),
+                                                        ),
+                                                        (route) => false);
+                                              },
+                                              child: Text(
+                                                "yes",
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                primary: tabColor,
+                                              ),
+                                            ),
                                             ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text(
-                                                  "No",
-                                                  style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                )),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Colors.black,
+                                              ),
+                                              child: Text(
+                                                "No",
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         );
                                       });
@@ -647,7 +892,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: 20.0,
                                         ),
                                         Text(
-                                          "Logout",
+                                          "Log out",
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -695,9 +940,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                        const SizedBox(
-                          height: 290.0,
-                        ),
+                        // const SizedBox(
+                        //   height: 250.0,
+                        // ),
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Text(
@@ -805,9 +1050,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  color: index == 0
-                                                      ? Colors.black
-                                                      : Colors.white,
+                                                  color: Colors.white,
                                                   boxShadow: [
                                                     BoxShadow(
                                                       color: Colors.grey
@@ -842,9 +1085,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           GoogleFonts.poppins(
                                                         fontWeight:
                                                             FontWeight.w500,
-                                                        color: index == 0
-                                                            ? Colors.white
-                                                            : Colors.black,
+                                                        color: Colors.black,
                                                       ),
                                                     ),
                                                   ],

@@ -820,8 +820,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     ? const PriceLoading()
                     : ElevatedButton(
                         onPressed: () {
-                          // openCheckOut();
-                          orderDone("hdshsdhcbsj");
+                          openCheckOut();
+                          // orderDone("hdshsdhcbsj");
                         },
                         child: Text(
                           "PAY NOW",

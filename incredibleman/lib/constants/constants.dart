@@ -11,7 +11,7 @@ const String splashScreen = "assets/images/splashscreen.png";
 
 const Color bg = Color(0xffF1F1F1);
 const List cimage = [
-  "assets/images/beard.png",
+  "assets/images/breadnew.png",
   "assets/images/body.png",
   "assets/images/face.png",
   "assets/images/hair.png",
@@ -84,6 +84,13 @@ const String loading = "assets/images/loding.json";
 const String search = "assets/images/search.png";
 
 const String tx = "assets/images/tx.png";
+
+const String breadcat = "assets/images/breadcat.png";
+const String bodycat = "assets/images/bodycat.png";
+const String facecat = "assets/images/facecat.png";
+const String haircat = "assets/images/haircat.png";
+const String imcat = "assets/images/imcat.png";
+const String oralcat = "assets/images/oralcat.png";
 
 const String baseUrl = "https://www.incredibleman.in";
 

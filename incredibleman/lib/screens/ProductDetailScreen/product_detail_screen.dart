@@ -123,7 +123,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 onPressed: () async {
                   userin = await controller.userlogin();
-                  // print(userin);
+                  print(userin);
                   if (userin == false) {
                     await Hive.box(Cart_Items)
                         .put(widget.data.id, widget.data.id);

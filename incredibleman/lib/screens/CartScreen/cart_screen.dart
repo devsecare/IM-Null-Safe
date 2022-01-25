@@ -244,6 +244,16 @@ class _CartScreenState extends State<CartScreen> {
                                                                 getData();
                                                                 print(
                                                                     "aa kyu che 1200");
+                                                                // Get.snackbar(
+                                                                //   "Sample Added",
+                                                                //   "one Sample Added",
+                                                                //   backgroundColor:
+                                                                //       Colors
+                                                                //           .black54,
+                                                                //   colorText:
+                                                                //       Colors
+                                                                //           .white,
+                                                                // );
                                                               } else if (double.parse(contro
                                                                           .testTotal
                                                                           .value) >=
