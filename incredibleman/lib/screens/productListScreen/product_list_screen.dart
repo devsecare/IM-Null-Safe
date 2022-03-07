@@ -13,6 +13,8 @@ import 'package:incredibleman/screens/widgetHelper/shop_container.dart';
 
 import '../../main.dart';
 
+// this screen will be used for products list
+
 class ProductListScreen extends StatefulWidget {
   final List<WooProduct> product;
   final WooCustomer? user;

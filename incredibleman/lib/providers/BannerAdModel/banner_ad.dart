@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+/// this is Model Define for BannerApi
+
 BannerAd bannerAdFromJson(String str) => BannerAd.fromJson(json.decode(str));
 
 String bannerAdToJson(BannerAd data) => json.encode(data.toJson());

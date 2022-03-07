@@ -29,6 +29,8 @@ class ReviewContainer extends StatelessWidget {
                 child: Image.network(
                   img!,
                   scale: 0.5,
+                  width: 25,
+                  height: 25,
                 ),
               ),
               const SizedBox(

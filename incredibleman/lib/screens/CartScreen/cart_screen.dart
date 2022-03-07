@@ -164,7 +164,6 @@ class _CartScreenState extends State<CartScreen> {
                                           category = sample.data;
                                           if (sample.connectionState ==
                                               ConnectionState.waiting) {
-                                            print("aaa thai che error ");
                                             return const Center(
                                                 child:
                                                     CircularProgressIndicator());
@@ -242,8 +241,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                 contro
                                                                     .testData();
                                                                 getData();
-                                                                print(
-                                                                    "aa kyu che 1200");
+
                                                                 // Get.snackbar(
                                                                 //   "Sample Added",
                                                                 //   "one Sample Added",
@@ -384,7 +382,6 @@ class _CartScreenState extends State<CartScreen> {
               children: [
                 GetX<CartData>(
                   init: contro,
-                  // initState: contro.fetchdata(widget.products),
                   builder: (data) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),

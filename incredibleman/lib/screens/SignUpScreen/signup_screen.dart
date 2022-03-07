@@ -7,6 +7,7 @@ import 'package:incredibleman/providers/woocommerceModels/woo_customer.dart';
 import 'package:incredibleman/screens/Home/home.dart';
 import 'package:incredibleman/screens/widgetHelper/loading_screen.dart';
 
+// this is screen for signup to user
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -230,6 +231,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   padding: const EdgeInsets.all(8.0),
                   minimumSize: Size(width / 1.18, 50)),
               onPressed: () async {
+                // here is the request  to sign up will happend
+
                 if (_formkey.currentState!.validate()) {
                   setState(() {
                     _loading = true;
@@ -262,37 +265,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     });
                     // ignore: unused_catch_clause
                   } on Exception catch (e) {
+                    /// here error is check
                     setState(() {
                       _loading = false;
                     });
                     Get.defaultDialog(
                         title: "Alert!", middleText: " User already exists");
-
-                    // WooCommerceError e;
-                    // // throw WooCommerceError;
-
-                    // print("aaa try ni error ${e.code}");
                   }
-
-                  // await CartData.woocommerce
-                  //     .createCustomer(customer)
-                  //     .then((val) async {
-                  //   print(val);
-                  //   // var us = await CartData.woocommerce.loginCustomer(
-                  //   //   username: _firstname.text,
-                  //   //   password: _password.text,
-                  //   // );
-
-                  //   setState(() {
-                  //     _loading = false;
-                  //
-                  //     // print(us);
-                  //   });
-                  // });
                 }
-
-                // bool created =
-                //     await CartData.woocommerce.createCustomer(customer);
               },
               icon: const Icon(Icons.arrow_back),
               label: const Text("REGISTER"),

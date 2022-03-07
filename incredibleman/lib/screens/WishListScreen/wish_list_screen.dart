@@ -54,6 +54,7 @@ class _WishListScreenState extends State<WishListScreen> {
             ],
           ),
           actions: [
+            // obx used to manage state of this block
             Obx(() => Padding(
                   padding: const EdgeInsets.all(7.0),
                   child: Badge(

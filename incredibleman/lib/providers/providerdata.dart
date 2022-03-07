@@ -19,10 +19,13 @@ import 'couponModel/coupon_model.dart';
 import 'shippingmodel/shipping_model.dart';
 
 class CartData extends GetxController {
+  //This are observer variable using GetX state Management
   List<WooProduct> newProducts = List<WooProduct>.empty(growable: true).obs;
   var lodgin = true.obs;
   var mainloding = true.obs;
   var cr = true.obs;
+
+  //This is configation for wooCommerce baseUrl and keys
   static late WooCommerce wooCommerce = WooCommerce(
     baseUrl: baseUrl,
     consumerKey: ck,
@@ -35,10 +38,10 @@ class CartData extends GetxController {
     super.onInit();
   }
 
+// this function used for fatching product from api for first time when app open
   getxfetchData() async {
     try {
       mainloding(true);
-      // print(mainloding.value);
 
       var gx = await wooCommerce.getProducts(
         perPage: 50,
@@ -49,7 +52,6 @@ class CartData extends GetxController {
 
       update();
       mainloding(false);
-      // print(mainloding.value);
     } catch (e) {
       Get.defaultDialog(
           title: "Opps... ",
@@ -61,6 +63,8 @@ class CartData extends GetxController {
   List<WooProduct> cartdata2 = List<WooProduct>.empty(growable: true).obs;
 
   var loginornot = false.obs;
+
+  var reviewloading = false.obs;
 
   var favTotal = 0.obs;
   var cartitem = 0.obs;
@@ -75,11 +79,13 @@ class CartData extends GetxController {
 
   List<CartBox>? tcart = List<CartBox>.empty(growable: true).obs;
 
+//this function is used for to save into favlist
   fav() {
     var dd = Hive.box(FavList).length;
     favItme(dd);
   }
 
+// this function is used for fatching reviews for products
   Future<List<Reviews>> reviews({required String id}) async {
     try {
       var response = await http.get(Uri.parse(
@@ -94,6 +100,7 @@ class CartData extends GetxController {
     }
   }
 
+// this function is used for fatching coupons from woocommmerce api
   static Future<List<CouponModel>> couponCheck({required String code}) async {
     try {
       var response = await http.get(
@@ -110,6 +117,7 @@ class CartData extends GetxController {
     }
   }
 
+// this function is  used for fatching banner image and id from custome api
   static Future<BannerAd> bannerAD() async {
     try {
       var response = await http.get(
@@ -124,6 +132,7 @@ class CartData extends GetxController {
     }
   }
 
+// this function is used for fatching shippingmathod from wooCommerce api
   static Future<List<ShippingModel>> shippingDatat({required int id}) async {
     try {
       var response = await http.get(Uri.parse(
@@ -136,6 +145,35 @@ class CartData extends GetxController {
     }
   }
 
+// this function is used to post review using api
+  void createReview({
+    int? id,
+    String? review,
+    String? reviewer,
+    String? reviewerEmail,
+    int? rating,
+  }) async {
+    var data = {
+      'product_id': id,
+      'review': review,
+      'reviewer': reviewer,
+      'reviewer_email': reviewerEmail,
+      'rating': rating,
+    };
+    var jsone = json.encode(data);
+    reviewloading(true);
+
+    await http.post(
+        Uri.parse(
+            "https://www.incredibleman.in/wp-json/wc/v3/products/reviews?consumer_key=ck_e9df4b7d747d2ccc30946837db4d3ef80b215535&consumer_secret=cs_e0d2efcba59453a6883a91b0bbf241d699898151"),
+        body: jsone,
+        headers: {"Content-Type": "application/json"},
+        encoding: Encoding.getByName("utf-8"));
+
+    reviewloading(false);
+  }
+
+// this function is used for fatching orders list by userid from woocommmerce api
   static Future<List<WooOrder>> getAllOrder({int? userid}) async {
     late List<WooOrder> order = [];
 
@@ -158,6 +196,17 @@ class CartData extends GetxController {
               total: o['total'],
               lineItems: List<LineItems>.from(
                   o["line_items"].map((x) => LineItems.fromJson(x))).toList(),
+              totalTax: o['total_tax'],
+              customerId: o['customer_id'],
+              cartTax: o['cart_tax'],
+              shippingTotal: o['shipping_total'],
+              transactionId: o['transaction_id'],
+              taxLines: List<TaxLines>.from(
+                  o['tax_lines'].map((x) => TaxLines.fromJson(x))).toList(),
+              shippingLines: List<ShippingLines>.from(
+                      o['shipping_lines'].map((x) => ShippingLines.fromJson(x)))
+                  .toList(),
+              // couponLines: o['coupon_lines'],
             ),
           );
         }
@@ -170,6 +219,7 @@ class CartData extends GetxController {
     }
   }
 
+// this function is used for fatching list of favlist from database (Hive Database(Nosql))
   favList(List<WooProduct> dd) {
     lodgin(true);
     mainloding(true);
@@ -183,6 +233,7 @@ class CartData extends GetxController {
     mainloding(false);
   }
 
+// this function will check issave on favlist or not
   void isSave(key) {
     lodgin(true);
     mainloding(true);
@@ -196,11 +247,13 @@ class CartData extends GetxController {
     mainloding(false);
   }
 
+// this function will remove a product  from fav list from database
   void favRemove(product) {
     Hive.box(FavList).delete(product).obs;
     fav();
   }
 
+// this function will add product to fav list to the Database
   void addFav(key, value) {
     Hive.box(FavList).put(key, value).obs;
     fav();
@@ -211,6 +264,7 @@ class CartData extends GetxController {
     cartitme1();
   }
 
+// this function will check user is login or not from woocommerce api
   Future<bool> userlogin() async {
     var loginornot1 = await wooCommerce.isCustomerLoggedIn();
     loginornot(loginornot1);
@@ -220,6 +274,7 @@ class CartData extends GetxController {
 // /////////////////////////////////////////////////////////////////
 //   ///
 
+// this function will count the cart products
   cartitme1() {
     cr(true);
     var dd = Hive.box(TestBox).length;
@@ -239,6 +294,7 @@ class CartData extends GetxController {
     lodgin1(false);
   }
 
+  /// this function will check for sample product and all condictions
   void sampleDatacheck() {
     lodgin1(true);
     var del = tcart?.where((element) => element.sample == false).toList();
@@ -264,154 +320,17 @@ class CartData extends GetxController {
     lodgin1(false);
   }
 
+// this function will remove the products from sample list
   remove(product) {
     Hive.box(TestBox).delete(product).obs;
     cartitem(tcart?.length);
     cartitme1();
   }
 
+// this function will add products into cart database
   cartAdd(key, value) {
     Hive.box(TestBox).put(key, value).obs;
     cartitem(tcart?.length);
     cartitme1();
   }
 }
-
-
-
-
-
-
-
-
-//  if (sample.hasError ||
-//                                               sample.data == null ||
-//                                               sample.data!.length == 0) {
-//                                             print("aaa thai che error ");
-//                                             return const Center(
-//                                               child: Text("No Sample"),
-//                                             );
-//                                           } else if (sample.data!.isNotEmpty) {
-//                                             category = sample.data;
-//                                             return SingleChildScrollView(
-//                                               child: Column(
-//                                                 children: [
-//                                                   const SizedBox(
-//                                                     height: 20.0,
-//                                                   ),
-//                                                   Text(
-//                                                     "Add Sample Prodcuts",
-//                                                     style: GoogleFonts.poppins(
-//                                                       fontSize: 15.0,
-//                                                       fontWeight:
-//                                                           FontWeight.bold,
-//                                                     ),
-//                                                   ),
-//                                                   const SizedBox(
-//                                                     height: 20.0,
-//                                                   ),
-//                                                   ListView.builder(
-//                                                       itemCount:
-//                                                           category!.length,
-//                                                       shrinkWrap: true,
-//                                                       physics:
-//                                                           const NeverScrollableScrollPhysics(),
-//                                                       itemBuilder:
-//                                                           (context, index) {
-//                                                         final cat =
-//                                                             category![index];
-//                                                         //  CartBox dd = contro.tcart[index];
-//                                                         return Padding(
-//                                                           padding:
-//                                                               const EdgeInsets
-//                                                                   .all(8.0),
-//                                                           child:
-//                                                               SampleContainer(
-//                                                             name: cat.name!,
-//                                                             url: cat.images![0]
-//                                                                 .src!,
-//                                                             add: () {
-//                                                               var x = contro
-//                                                                   .tcart
-//                                                                   ?.where((element) =>
-//                                                                       element
-//                                                                           .sample ==
-//                                                                       false)
-//                                                                   .toList();
-//                                                               if (double.parse(contro
-//                                                                           .testTotal
-//                                                                           .value) >=
-//                                                                       1200.0 &&
-//                                                                   x!.length <
-//                                                                       2) {
-//                                                                 Hive.box(
-//                                                                         TestBox)
-//                                                                     .put(
-//                                                                         cat.id,
-//                                                                         CartBox(
-//                                                                           1,
-//                                                                           cat.id!,
-//                                                                           cat.name!,
-//                                                                           cat.price!,
-//                                                                           cat.images![0]
-//                                                                               .src!,
-//                                                                           false,
-//                                                                         ));
-//                                                                 contro
-//                                                                     .testData();
-//                                                                 getData();
-//                                                                 print(
-//                                                                     "aa kyu che 1200");
-//                                                               } else if (double.parse(contro
-//                                                                           .testTotal
-//                                                                           .value) >=
-//                                                                       700.0 &&
-//                                                                   double.parse(contro
-//                                                                           .testTotal
-//                                                                           .value) <
-//                                                                       1200.0 &&
-//                                                                   x!.length ==
-//                                                                       0) {
-//                                                                 Hive.box(
-//                                                                         TestBox)
-//                                                                     .put(
-//                                                                         cat.id,
-//                                                                         CartBox(
-//                                                                           1,
-//                                                                           cat.id!,
-//                                                                           cat.name!,
-//                                                                           cat.price!,
-//                                                                           cat.images![0]
-//                                                                               .src!,
-//                                                                           false,
-//                                                                         ));
-//                                                                 contro
-//                                                                     .testData();
-//                                                                 getData();
-//                                                                 print(
-//                                                                     "aa kyu che");
-//                                                               } else {
-//                                                                 Get.snackbar(
-//                                                                   "Sample Already Added",
-//                                                                   "No More Sample ",
-//                                                                   backgroundColor:
-//                                                                       Colors
-//                                                                           .black54,
-//                                                                   colorText:
-//                                                                       Colors
-//                                                                           .white,
-//                                                                 );
-//                                                               }
-//                                                             },
-//                                                           ),
-//                                                         );
-//                                                       }),
-//                                                 ],
-//                                               ),
-//                                             );
-//                                           } else {
-//                                             return const Center(
-//                                                 child:
-//                                                     CircularProgressIndicator());
-//                                           }
-//                                         }),

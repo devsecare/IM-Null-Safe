@@ -6,6 +6,7 @@ import 'package:incredibleman/providers/woocommerceModels/woo_customer.dart';
 import 'package:incredibleman/screens/Home/home.dart';
 import 'package:incredibleman/screens/widgetHelper/loading_screen.dart';
 
+//this screen will used for edit address of the user
 class EditAddressScreen extends StatefulWidget {
   final WooCustomer? user;
   const EditAddressScreen({Key? key, this.user}) : super(key: key);
@@ -17,6 +18,8 @@ class EditAddressScreen extends StatefulWidget {
 class _EditAddressScreenState extends State<EditAddressScreen> {
   final _formkey = GlobalKey<FormState>();
   bool _loading = false;
+
+  // text edit controller
   final TextEditingController _firstname = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _postal = TextEditingController();
@@ -226,21 +229,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                   onChanged: (String? value) {
                                     _state.text = value!;
                                   }),
-                              // TextField(
-                              //   controller: _state
-                              //     ..text = widget.user!.billing!.state!
-                              //         .toUpperCase(),
-                              //   keyboardType: TextInputType.text,
-                              //   textCapitalization:
-                              //       TextCapitalization.characters,
-                              //   decoration: const InputDecoration(
-                              //     contentPadding: EdgeInsets.only(
-                              //       left: 15,
-                              //     ),
-                              //     hintText: "Your State",
-                              //     border: OutlineInputBorder(),
-                              //   ),
-                              // ),
                             ],
                           )),
                         ],
@@ -292,7 +280,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                           }
                           return null;
                         },
-                        // controller: _username,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Enter Locality/town',
@@ -312,7 +299,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                           }
                           return null;
                         },
-                        // controller: _username,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Enter City/District',
@@ -325,22 +311,6 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
               ),
             ),
           ),
-          // ElevatedButton(
-          //   onPressed: () {},
-          //   style: ElevatedButton.styleFrom(
-          //     primary: Colors.white,
-          //     side: BorderSide(
-          //       width: 1.0,
-          //       color: tabColor,
-          //     ),
-          //     padding: const EdgeInsets.all(8.0),
-          //     minimumSize: Size(335, 50),
-          //   ),
-          //   child: Text(
-          //     "CHANGE PASSWORD",
-          //     style: TextStyle(color: tabColor),
-          //   ),
-          // ),
           const SizedBox(
             height: 15.0,
           ),
@@ -355,6 +325,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
               minimumSize: const Size(335, 50),
             ),
             onPressed: () async {
+              /// this is post request for address
               if (_formkey.currentState!.validate()) {
                 setState(() {
                   _loading = true;

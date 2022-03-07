@@ -1,17 +1,20 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+// this is for LocalNotification for both Android and IOS
 class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _notification =
       FlutterLocalNotificationsPlugin();
 
   static void initialize() {
+    // this is initialzation for notification  for Android and IOS
     InitializationSettings initializationSettings =
         const InitializationSettings(
             android: AndroidInitializationSettings("@mipmap/ic_launcher"),
             iOS: IOSInitializationSettings());
 
     ///new one added here
+    //this is configration for android notification channel
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
         'FLUTTER_NOTIFICATION_CLICK', "IM notification",
         importance: Importance.high, playSound: true);
@@ -19,18 +22,22 @@ class LocalNotificationService {
     _notification.initialize(initializationSettings);
 
     ///new one added here
+    //implemented platform channel
     _notification
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
 
+// this static function will display remote notification
   static void display(RemoteMessage message) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      print("aa kyre thai che");
+
+      // here is the details of noftification channel for android and default IOS
 
       NotificationDetails notificationDetails = const NotificationDetails(
+        // don't forget to pass notification channel name to notification data
         android: AndroidNotificationDetails(
           "FLUTTER_NOTIFICATION_CLICK",
           "IM notification",
@@ -42,6 +49,8 @@ class LocalNotificationService {
         ),
         iOS: IOSNotificationDetails(),
       );
+
+      // this show method will trigger when notification comes
 
       await _notification.show(
         id,

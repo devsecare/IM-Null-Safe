@@ -371,13 +371,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 minimumSize: Size(width / 1.16, 50),
               ),
               onPressed: () async {
+                // this is request to update profile details of user on backend
                 if (_formkey.currentState!.validate()) {
                   setState(() {
                     _loading = true;
                   });
-                  //////////////////////////////
-                  /////////////////////////////
-                  ////////////////////////////
+
                   try {
                     WooCustomer updateCustomer = WooCustomer(
                       id: widget.user.id,
@@ -414,10 +413,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   setState(() {
                     _loading = false;
                   });
-                  // print(_email.text);
-                  // print(_dd.text);
-                  // print(_mm.text);
-                  // print(_yyyy.text);
                 }
               },
               icon: const Icon(Icons.arrow_forward),

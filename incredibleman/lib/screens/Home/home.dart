@@ -946,7 +946,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            "V1.0.4 ©Incredibleman.in",
+                            "V1.0.6 ©Incredibleman.in",
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w500,
                               fontSize: 10.0,

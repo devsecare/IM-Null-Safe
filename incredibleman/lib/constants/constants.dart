@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// HERE IS ALL CONSTANTS FILE WHICH IS USED IN THIS APP IN ALL SCREENS
+
 const Color mainColor = Color(0xff0F0E0F);
 const Color black = Colors.black;
 

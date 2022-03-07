@@ -17,6 +17,7 @@ const String FavList = "fav";
 const String TestBox = "TestBox";
 // final bool nav = false;
 
+//  THIS FUNCTIONS IS FOR FATCHING REMOTE NOTIFICATIONS
 Future<void> backgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   // ignore: avoid_print
@@ -46,6 +47,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // HERE THE DEPENDANCE IS INJACTAED
   final cro = Get.put(CartData());
   MyApp({Key? key}) : super(key: key);
 

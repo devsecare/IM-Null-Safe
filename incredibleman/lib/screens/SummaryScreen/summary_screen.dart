@@ -441,9 +441,15 @@ class _SummaryScreenState extends State<SummaryScreen> {
         for (var item in cop[0].usedBy!) {
           if (item == userEmail.toString()) {
             i = i + 1;
+            print(i);
           }
         }
-        if (cop[0].usageLimitPerUser! > i) {
+
+        if (cop[0].usageLimitPerUser == null) {
+          print("user per limit j nthi ");
+          couponPer(cop: cop);
+          return;
+        } else if (cop[0].usageLimitPerUser! > i) {
           print("vapri sake che");
           couponPer(cop: cop);
           return;

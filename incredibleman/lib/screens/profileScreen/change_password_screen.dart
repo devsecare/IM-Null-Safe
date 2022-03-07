@@ -6,6 +6,7 @@ import 'package:incredibleman/providers/providerdata.dart';
 import 'package:incredibleman/providers/woocommerceModels/woo_customer.dart';
 import 'package:incredibleman/screens/widgetHelper/loading_screen.dart';
 
+// this screen will used for change password of the users
 class ChangePassword extends StatefulWidget {
   final WooCustomer user;
   const ChangePassword({Key? key, required this.user}) : super(key: key);
@@ -124,6 +125,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               minimumSize: const Size(335, 50),
             ),
             onPressed: () async {
+              // here is the request of change password and update user on backends
               if (_formkey.currentState!.validate()) {
                 setState(() {
                   _loading = true;

@@ -8,6 +8,7 @@ import 'package:incredibleman/screens/SignUpScreen/signup_screen.dart';
 import 'package:incredibleman/screens/widgetHelper/loading_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// this is login screen where login and validations task will be performed
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -186,6 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 minimumSize: Size(width / 1.18, 50),
               ),
               onPressed: () async {
+                // here the post request will execute and reture user from api
                 if (_formkey.currentState!.validate()) {
                   setState(() {
                     _loading = true;

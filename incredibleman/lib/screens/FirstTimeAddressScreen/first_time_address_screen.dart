@@ -6,6 +6,7 @@ import 'package:incredibleman/providers/woocommerceModels/woo_customer.dart';
 import 'package:incredibleman/screens/Home/home.dart';
 import 'package:incredibleman/screens/widgetHelper/loading_screen.dart';
 
+// this screen will used when user register and add first time address
 class FirstTimeAddress extends StatefulWidget {
   final WooCustomer? user;
   const FirstTimeAddress({Key? key, this.user}) : super(key: key);

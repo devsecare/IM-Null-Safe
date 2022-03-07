@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -22,11 +23,14 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../main.dart';
 
+// this screen will be used for products details screen all followed by details of single products
+
 class ProductDetailScreen extends StatefulWidget {
   final WooProduct data;
   final WooCustomer? user;
   final List<WooProduct>? products;
   final bool login;
+
   const ProductDetailScreen(
       {Key? key,
       required this.data,
@@ -42,13 +46,25 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   CartData controller = Get.find<CartData>();
   late bool userin;
+  int _rating = 5;
+
   // ignore: prefer_typing_uninitialized_variables
   var off;
   DateFormat dateFormat = DateFormat("yyyy-MM-dd – HH:mm:ss");
+  final TextEditingController _review = TextEditingController();
+  @override
+  void initState() {
+    controller.userlogin();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
+    // this will calculate the %off from the products
     if (widget.data.onSale!) {
       var go = double.parse(widget.data.salePrice!) /
           double.parse(widget.data.regularPrice!);
@@ -56,7 +72,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       var tt = go * 100;
       off = 100 - tt.round();
     }
-    // print(widget.data.id);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -123,7 +139,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 onPressed: () async {
                   userin = await controller.userlogin();
-                  print(userin);
+
                   if (userin == false) {
                     await Hive.box(Cart_Items)
                         .put(widget.data.id, widget.data.id);
@@ -466,7 +482,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ],
                 ),
               ),
-
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Divider(
@@ -565,7 +580,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               const SizedBox(
                 height: 20.0,
               ),
-
               Padding(
                 padding:
                     const EdgeInsets.only(left: 15.0, bottom: 5.0, right: 15.0),
@@ -726,6 +740,101 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               const SizedBox(
                 height: 30.0,
               ),
+
+              /// this block is for review
+              Obx(() => controller.loginornot.value == true
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, bottom: 5.0, right: 15.0),
+                          child: Text(
+                            "Leave feedback about this",
+                            style: GoogleFonts.poppins(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, bottom: 5.0, right: 15.0),
+                          child: RatingBar.builder(
+                            initialRating: 5,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            itemCount: 5,
+                            itemSize: 25,
+                            itemPadding: const EdgeInsets.symmetric(
+                              horizontal: 4.0,
+                            ),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: tabColor,
+                            ),
+                            onRatingUpdate: (rating) {
+                              _rating = rating.toInt();
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, bottom: 5.0, right: 15.0),
+                          child: TextField(
+                            maxLines: 5,
+                            controller: _review,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Describe your review",
+                              fillColor: Color.fromARGB(255, 235, 234, 234),
+                              filled: true,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, bottom: 5.0, right: 15.0),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              CartData().createReview(
+                                id: widget.data.id,
+                                rating: _rating,
+                                review: _review.text,
+                                reviewer: widget.user!.username,
+                                reviewerEmail: widget.user!.email,
+                              );
+                              _review.clear();
+                              Get.snackbar(
+                                "Review Added",
+                                "Your Review has been Added",
+                                colorText: Colors.white,
+                                backgroundColor: Colors.black,
+                              );
+                            },
+                            child: const Text(
+                              "Submit",
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: tabColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox()),
+              const SizedBox(
+                height: 20.0,
+              ),
               Padding(
                 padding:
                     const EdgeInsets.only(left: 15.0, bottom: 5.0, right: 15.0),
@@ -738,9 +847,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
               const SizedBox(
-                height: 30.0,
+                height: 15.0,
               ),
 
+              // this builder will used for showing reviews
               FutureBuilder(
                 // initialData: [],
                 future: CartData().reviews(id: widget.data.id.toString()),
@@ -778,20 +888,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               const SizedBox(
                 height: 100.0,
               ),
-
-              // Html(
-              //   data: widget.data.shortDescription,
-              //   customRender: {
-              //     "li": (
-              //       RenderContext context,
-              //       Widget child,
-              //     ) {
-              //       return customListItem(context.tree.element);
-              //     },
-              //   },
-              // ),
-
-              // Text(data.shortDescription),
             ],
           ),
         ),
